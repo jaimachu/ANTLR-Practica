@@ -7,7 +7,8 @@ NUMERIC_INTEGER_CONST : ('+'|'-')? [0-9]+;
 STRING_CONST : (DOBLES | SIMPLES)+;
 
 fragment
-DOBLES : ('"') (PUNTO)*  ('"');
-SIMPLES :  ('\'') (PUNTO | '\'')* ('\'');
+DOBLES : ('"') (PUNTO | '\'' | (BARRA '"') | (BARRA '\''))*  ('"');
+SIMPLES :  ('\'') (PUNTO | (BARRA '\'') | (BARRA '"') | '"')* ('\'');
 //RESERVADAS : ;
 PUNTO : [a-zA-Z0-9] | ' ';
+BARRA : '\\';
