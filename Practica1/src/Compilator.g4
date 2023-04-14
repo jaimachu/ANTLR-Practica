@@ -89,7 +89,7 @@ explist : exp
 /* Analizador léxico */
 
 ESPACIO: ' ' -> skip;
-SALTOS: '\n' -> skip;
+SALTOS: [\r\n\t] -> skip;
 CONST_DEF_IDENTIFIER : ('_')* [A-Z]+ ([A-Z0-9]+ | '_')*{System.out.println("Hola");};
 IDENTIFIER : ('_')* [a-zA-Z]+ ([a-zA-Z0-9]+ | '_')*;
 NUMERIC_REAL_CONST : ('+'|'-')? (([0-9]* '.' [0-9]+) | ([0-9]+ ('e' | 'E') ('+'|'-')? [0-9]+) | ([0-9]* '.' [0-9]+ ('e' | 'E') ('+'|'-')? [0-9]+));

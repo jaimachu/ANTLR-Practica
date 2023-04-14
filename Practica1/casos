@@ -1,1 +1,13 @@
-#define CONSTANTE 10
+#define CONSTANTE1 10
+integer x = 2;
+float y = 2.4;
+
+void funcion1(float var1, float var2){
+    float var1 = -0.1e3;
+    float var2 = -.10e-5;
+}
+
+void main(){
+    funcion(x, y);
+    float r = x + y;
+}
