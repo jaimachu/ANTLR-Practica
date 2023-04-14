@@ -3,7 +3,7 @@ grammar Compilator;
 
 /* Analizador sintáctico*/
 
-program : dcllist funlist sentlist <EOF>;
+program : dcllist funlist sentlist <EOF>{System.out.print("Aceptado");};
 
 dcllist :
     | dcllist dcl;
