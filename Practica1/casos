@@ -7,7 +7,7 @@ void funcion1(float var1, float var2){
     float var2 = -.10e-5;
 }
 
-void main(){
+void Main(){
     funcion(x, y);
-    float r = x + y;
+    float r = 5;
 }

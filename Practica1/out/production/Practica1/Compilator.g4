@@ -6,36 +6,43 @@ grammar Compilator;
 program : dcllist funlist sentlist <EOF>;
 
 dcllist :
-    | dcllist dcl;
+    | dcllist dcl
+    ;
 
 funlist :
-    | funlist funcdef;
+    | funlist funcdef
+    ;
 
 sentlist: mainhead '{' code '}';
 
 dcl : ctelist
-    | varlist;
+    | varlist
+    ;
 
-ctelist : '#define' CONST_DEF_IDENTIFIER simpvalue ctelistP{System.out.print("Hola");};
+ctelist : '#define' CONST_DEF_IDENTIFIER simpvalue ctelistP;
 ctelistP : '#define' CONST_DEF_IDENTIFIER simpvalue
 		|
 		;
 
 simpvalue : NUMERIC_INTEGER_CONST
     | NUMERIC_REAL_CONST
-    | STRING_CONST;
+    | STRING_CONST
+    ;
 
 varlist : vardef ';' varlistP;
 varlistP : vardef ';'
-		| ;
+		|
+		;
 
 vardef : tbas IDENTIFIER
-    | tbas IDENTIFIER '=' simpvalue;
+    | tbas IDENTIFIER '=' simpvalue
+    ;
 
 tbas : 'integer'
     | 'float'
     | 'string'
-    | tvoid;
+    | tvoid
+    ;
 
 tvoid : 'void';
 
@@ -44,53 +51,62 @@ funcdef : funchead '{' code '}';
 funchead : tbas IDENTIFIER '(' typedef1 ')';
 
 typedef1 :
-    | typedef2;
+    | typedef2
+    ;
 
 typedef2 : tbas IDENTIFIER typedef2P;
-
 typedef2P : ',' tbas IDENTIFIER typedef2P
-		| ;
+		|
+		;
 
 mainhead : tvoid 'Main' '(' typedef1 ')';
 
 code : sent code
-		| ;
+		|
+		;
 
 sent : asig ';'
     | funccall ';'
-    | vardef ';';
+    | vardef ';'
+    ;
 
 asig : IDENTIFIER '=' exp;
 
-exp : op expP;
-expP : factor exp expP
-    | ;
+exp : factor expP;
+expP : op factor expP
+    |
+    ;
 
 op : '+'
     | '-'
     | '*'
     | 'DIV'
-    | 'MOD';
+    | 'MOD'
+    ;
 
 factor : simpvalue
     | '(' exp ')'
-    | funccall;
+    | funccall
+    ;
 
 funccall : IDENTIFIER subpparamlist
-    | CONST_DEF_IDENTIFIER subpparamlist;
+    | CONST_DEF_IDENTIFIER subpparamlist
+    ;
 
 subpparamlist :
-    | '(' explist ')';
+    | '(' explist ')'
+    ;
 
 explist : exp
     | exp ','
-    explist;
+    explist
+    ;
 
 /* Analizador léxico */
 
 ESPACIO: ' ' -> skip;
 SALTOS: [\r\n\t] -> skip;
-CONST_DEF_IDENTIFIER : ('_')* [A-Z]+ ([A-Z0-9]+ | '_')*{System.out.println("Hola");};
+CONST_DEF_IDENTIFIER : ('_')* [A-Z]+ ([A-Z0-9]+ | '_')*;
 IDENTIFIER : ('_')* [a-zA-Z]+ ([a-zA-Z0-9]+ | '_')*;
 NUMERIC_REAL_CONST : ('+'|'-')? (([0-9]* '.' [0-9]+) | ([0-9]+ ('e' | 'E') ('+'|'-')? [0-9]+) | ([0-9]* '.' [0-9]+ ('e' | 'E') ('+'|'-')? [0-9]+));
 NUMERIC_INTEGER_CONST : ('+'|'-')? [0-9]+;
