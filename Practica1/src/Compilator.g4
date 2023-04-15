@@ -24,7 +24,7 @@ program : dcllist funlist sentlist <EOF>;
 // 1. DECLARACIÓN DE VARIABLES Y CONSTANTES
 // ----------------------------------------
 dcllist :
-    | dcllist dcl
+    | dcl dcllist
     ;
 
 // Declaración de una variable o constante
@@ -70,7 +70,7 @@ struct : 'struct' '{' varlist '}';
 // 2. DECLARACIÓN DE FUNCIONES
 // ----------------------------------------
 funlist :
-    | funlist funcdef
+    | funcdef funlist
     ;
 
 // Estructura de la función
@@ -145,8 +145,7 @@ subpparamlist :
 
 // Lista de expresiones
 explist : exp
-    | exp ','
-    explist
+    | exp ',' explist
     ;
 
 // Sentencias de control

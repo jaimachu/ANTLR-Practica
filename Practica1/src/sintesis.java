@@ -4,9 +4,11 @@ import java.util.HashSet;
 public class sintesis {
 
     private HashSet<String> listaIdent;
+    private int tabulaciones;
 
     public sintesis (){
         listaIdent = new HashSet<>();
+        tabulaciones = 0;
     }
 
     public void newIdent(String ide){
