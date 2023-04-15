@@ -1,6 +1,5 @@
-grammar Compilator;
+grammar Borrador;
 //g : (IDENTIFIER | CONST_DEF_IDENTIFIER | NUMERIC_INTEGER_CONST | NUMERIC_REAL_CONST |STRING_CONST | COMENTARIO_SIMPLE | COMENTARIO_PAREJA)+;
-
 
 @parser::members{
 
@@ -44,7 +43,7 @@ varlistP : vardef ';'
 		|
 		;
 
-vardef : tbas IDENTIFIER {String cadena = $IDENTIFIER.text; informacion.existeIdent(cadena); informacion.newIdent(cadena);}
+vardef : tbas IDENTIFIER
     | tbas IDENTIFIER '=' simpvalue
     ;
 
@@ -187,39 +186,28 @@ opcomp : '<'
     | '=='
     ;
 
-
 /* Analizador léxico */
-//g : (IDENTIFIER | CONST_DEF_IDENTIFIER | NUMERIC_INTEGER_CONST | NUMERIC_REAL_CONST |STRING_CONST)+;
 
-SALTOS: [\r\n\t ]+ -> skip;
-
-COMENTARIO_PAREJA: ('/*') (ANYCHAR | NEW_LINE)* ('*/')->skip;
-COMENTARIO_SIMPLE: (BARRA_BARRA) (ANYCHAR)* NEW_LINE? ->skip;
-
+ESPACIO: ' ' -> skip;
+SALTOS: [\r\n\t] -> skip;
 CONST_DEF_IDENTIFIER : ('_')* [A-Z]+ ([A-Z0-9]+ | '_')*;
 IDENTIFIER : ('_')* [a-zA-Z]+ ([a-zA-Z0-9]+ | '_')*;
-
 NUMERIC_REAL_CONST : ('+'|'-')? (([0-9]* '.' [0-9]+) | ([0-9]+ ('e' | 'E') ('+'|'-')? [0-9]+) | ([0-9]* '.' [0-9]+ ('e' | 'E') ('+'|'-')? [0-9]+));
 NUMERIC_INTEGER_CONST : ('+'|'-')? [0-9]+;
-//hemos quitado las simples
-STRING_CONST : (DOBLES|SIMPLES) {
+STRING_CONST : (DOBLES | SIMPLES)+ {
     String cadena = getText();
-    cadena = cadena.replace("\\'", "'");
-    cadena = cadena.replace("\\\"", "\"");
-    cadena = cadena.substring(1, cadena.length()-1);
-    setText(cadena);
+    cadena = cadena.replace("'", "");
+    System.out.println("Token string: " + cadena);
     };
+COMENTARIO_SIMPLE: (BARRA_BARRA) (ANYCHAR)* NEW_LINE? -> channel(HIDDEN);
+COMENTARIO_PAREJA: ('/*') (ANYCHAR | NEW_LINE)* ('*/') -> channel(HIDDEN);
 
 fragment
-DOBLES : ('"') (ANYCHARDOBLES | '\'' | (BARRA '"') | (BARRA '\''))*  ('"');
-SIMPLES :  ('\'') (ANYCHARSIMPLES | (BARRA '\'') | (BARRA '"') | '"')* ('\'');
-
+DOBLES : ('"') (ANYCHAR | '\'' | (BARRA '"') | (BARRA '\''))*  ('"');
+SIMPLES :  ('\'') (ANYCHAR | (BARRA '\'') | (BARRA '"') | '"')* ('\'');
 //RESERVADAS : ;
-BARRA : '\\';
+PUNTO : [a-zA-Z0-9.] | ' ';
+BARRA : '\\' -> skip;
 BARRA_BARRA : '//';
-
-ANYCHARDOBLES: ~["\r\n] ;
-ANYCHARSIMPLES: ~['\r\n] ;
-
-ANYCHAR: ~[\r\t\n];
+ANYCHAR: ~[\r\n*/] | ~'\'';
 NEW_LINE: [\r\n];

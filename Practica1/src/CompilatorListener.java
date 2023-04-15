@@ -27,26 +27,6 @@ public interface CompilatorListener extends ParseTreeListener {
 	 */
 	void exitDcllist(CompilatorParser.DcllistContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link CompilatorParser#funlist}.
-	 * @param ctx the parse tree
-	 */
-	void enterFunlist(CompilatorParser.FunlistContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CompilatorParser#funlist}.
-	 * @param ctx the parse tree
-	 */
-	void exitFunlist(CompilatorParser.FunlistContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CompilatorParser#sentlist}.
-	 * @param ctx the parse tree
-	 */
-	void enterSentlist(CompilatorParser.SentlistContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CompilatorParser#sentlist}.
-	 * @param ctx the parse tree
-	 */
-	void exitSentlist(CompilatorParser.SentlistContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link CompilatorParser#dcl}.
 	 * @param ctx the parse tree
 	 */
@@ -76,16 +56,6 @@ public interface CompilatorListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCtelistP(CompilatorParser.CtelistPContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CompilatorParser#simpvalue}.
-	 * @param ctx the parse tree
-	 */
-	void enterSimpvalue(CompilatorParser.SimpvalueContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CompilatorParser#simpvalue}.
-	 * @param ctx the parse tree
-	 */
-	void exitSimpvalue(CompilatorParser.SimpvalueContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link CompilatorParser#varlist}.
 	 * @param ctx the parse tree
@@ -117,6 +87,16 @@ public interface CompilatorListener extends ParseTreeListener {
 	 */
 	void exitVardef(CompilatorParser.VardefContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link CompilatorParser#simpvalue}.
+	 * @param ctx the parse tree
+	 */
+	void enterSimpvalue(CompilatorParser.SimpvalueContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CompilatorParser#simpvalue}.
+	 * @param ctx the parse tree
+	 */
+	void exitSimpvalue(CompilatorParser.SimpvalueContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link CompilatorParser#tbas}.
 	 * @param ctx the parse tree
 	 */
@@ -136,6 +116,26 @@ public interface CompilatorListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitTvoid(CompilatorParser.TvoidContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CompilatorParser#struct}.
+	 * @param ctx the parse tree
+	 */
+	void enterStruct(CompilatorParser.StructContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CompilatorParser#struct}.
+	 * @param ctx the parse tree
+	 */
+	void exitStruct(CompilatorParser.StructContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CompilatorParser#funlist}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunlist(CompilatorParser.FunlistContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CompilatorParser#funlist}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunlist(CompilatorParser.FunlistContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link CompilatorParser#funcdef}.
 	 * @param ctx the parse tree
@@ -186,6 +186,16 @@ public interface CompilatorListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitTypedef2P(CompilatorParser.Typedef2PContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CompilatorParser#sentlist}.
+	 * @param ctx the parse tree
+	 */
+	void enterSentlist(CompilatorParser.SentlistContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CompilatorParser#sentlist}.
+	 * @param ctx the parse tree
+	 */
+	void exitSentlist(CompilatorParser.SentlistContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link CompilatorParser#mainhead}.
 	 * @param ctx the parse tree
@@ -296,4 +306,104 @@ public interface CompilatorListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitExplist(CompilatorParser.ExplistContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CompilatorParser#if}.
+	 * @param ctx the parse tree
+	 */
+	void enterIf(CompilatorParser.IfContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CompilatorParser#if}.
+	 * @param ctx the parse tree
+	 */
+	void exitIf(CompilatorParser.IfContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CompilatorParser#else}.
+	 * @param ctx the parse tree
+	 */
+	void enterElse(CompilatorParser.ElseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CompilatorParser#else}.
+	 * @param ctx the parse tree
+	 */
+	void exitElse(CompilatorParser.ElseContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CompilatorParser#while}.
+	 * @param ctx the parse tree
+	 */
+	void enterWhile(CompilatorParser.WhileContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CompilatorParser#while}.
+	 * @param ctx the parse tree
+	 */
+	void exitWhile(CompilatorParser.WhileContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CompilatorParser#dowhile}.
+	 * @param ctx the parse tree
+	 */
+	void enterDowhile(CompilatorParser.DowhileContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CompilatorParser#dowhile}.
+	 * @param ctx the parse tree
+	 */
+	void exitDowhile(CompilatorParser.DowhileContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CompilatorParser#for}.
+	 * @param ctx the parse tree
+	 */
+	void enterFor(CompilatorParser.ForContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CompilatorParser#for}.
+	 * @param ctx the parse tree
+	 */
+	void exitFor(CompilatorParser.ForContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CompilatorParser#expcond}.
+	 * @param ctx the parse tree
+	 */
+	void enterExpcond(CompilatorParser.ExpcondContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CompilatorParser#expcond}.
+	 * @param ctx the parse tree
+	 */
+	void exitExpcond(CompilatorParser.ExpcondContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CompilatorParser#expcondP}.
+	 * @param ctx the parse tree
+	 */
+	void enterExpcondP(CompilatorParser.ExpcondPContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CompilatorParser#expcondP}.
+	 * @param ctx the parse tree
+	 */
+	void exitExpcondP(CompilatorParser.ExpcondPContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CompilatorParser#oplog}.
+	 * @param ctx the parse tree
+	 */
+	void enterOplog(CompilatorParser.OplogContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CompilatorParser#oplog}.
+	 * @param ctx the parse tree
+	 */
+	void exitOplog(CompilatorParser.OplogContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CompilatorParser#factorcond}.
+	 * @param ctx the parse tree
+	 */
+	void enterFactorcond(CompilatorParser.FactorcondContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CompilatorParser#factorcond}.
+	 * @param ctx the parse tree
+	 */
+	void exitFactorcond(CompilatorParser.FactorcondContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CompilatorParser#opcomp}.
+	 * @param ctx the parse tree
+	 */
+	void enterOpcomp(CompilatorParser.OpcompContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CompilatorParser#opcomp}.
+	 * @param ctx the parse tree
+	 */
+	void exitOpcomp(CompilatorParser.OpcompContext ctx);
 }
