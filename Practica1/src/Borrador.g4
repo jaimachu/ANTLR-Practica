@@ -21,20 +21,23 @@ dcl : ctelist
     ;
 
 // Estructura de una declaración de constante
-ctelist : '#define' CONST_DEF_IDENTIFIER simpvalue ctelistP;
-ctelistP : '#define' CONST_DEF_IDENTIFIER simpvalue
+ctelist : '#define' CONST_DEF_IDENTIFIER simpvalue ctelistP  ;
+
+ctelistP : '#define' CONST_DEF_IDENTIFIER simpvalue ctelistP
         |
         ;
 
 // Estructura de una declaración de variable
 varlist : vardef ';' varlistP;
-varlistP : vardef ';'
-		|
-		;
 
-vardef : tbas IDENTIFIER {String cadena = $IDENTIFIER.text; informacion.existeIdent(cadena); informacion.newIdent(cadena);}
-    | tbas IDENTIFIER '=' simpvalue
-    ;
+varlistP :
+    vardef ';' varlistP
+	|
+	;
+
+vardef : tbas IDENTIFIER vardefP;
+
+vardefP: '=' simpvalue | ;
 
 // Valor de la constante o variable
 simpvalue : NUMERIC_INTEGER_CONST
@@ -56,8 +59,8 @@ tvoid : 'void';
 // 2. DECLARACIÓN DE FUNCIONES
 // ----------------------------------------
 funlist :
-    | funcdef funlist
-    ;
+     funcdef funlist
+     | ;
 
 // Estructura de la función
 funcdef : funchead '{' code '}';
@@ -71,6 +74,7 @@ typedef1 :
     ;
 
 typedef2 : tbas IDENTIFIER typedef2P;
+
 typedef2P : ',' tbas IDENTIFIER typedef2P
 		|
 		;
