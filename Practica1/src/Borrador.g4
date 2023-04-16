@@ -1,17 +1,6 @@
 grammar Borrador;
 //g : (IDENTIFIER | CONST_DEF_IDENTIFIER | NUMERIC_INTEGER_CONST | NUMERIC_REAL_CONST |STRING_CONST | COMENTARIO_SIMPLE | COMENTARIO_PAREJA)+;
 
-@parser::members{
-
-    private sintesis informacion;
-
-    public CompilatorParser ( TokenStream input, sintesis informacion){
-        this(input);
-        this.informacion = informacion;
-    }
-
-}
-
 // ---------------------------------------------------
 // ------------ANALIZADOR SINTÁCTICO------------------
 // ---------------------------------------------------
@@ -23,7 +12,7 @@ program : dcllist funlist sentlist <EOF>;
 // 1. DECLARACIÓN DE VARIABLES Y CONSTANTES
 // ----------------------------------------
 dcllist :
-    | dcllist dcl
+    | dcl dcllist
     ;
 
 // Declaración de una variable o constante
@@ -43,7 +32,7 @@ varlistP : vardef ';'
 		|
 		;
 
-vardef : tbas IDENTIFIER
+vardef : tbas IDENTIFIER {String cadena = $IDENTIFIER.text; informacion.existeIdent(cadena); informacion.newIdent(cadena);}
     | tbas IDENTIFIER '=' simpvalue
     ;
 
@@ -58,18 +47,16 @@ tbas : 'integer'
     | 'float'
     | 'string'
     | tvoid
-    | struct
     ;
 
 tvoid : 'void';
 
-struct : 'struct' '{' varlist '}';
 
 // ----------------------------------------
 // 2. DECLARACIÓN DE FUNCIONES
 // ----------------------------------------
 funlist :
-    | funlist funcdef
+    | funcdef funlist
     ;
 
 // Estructura de la función
@@ -104,10 +91,6 @@ code : sent code
 sent : asig ';'
     | funccall ';'
     | vardef ';'
-    | if
-    | while
-    | dowhile
-    | for
     ;
 
 // Estructura de una asignación
@@ -143,71 +126,44 @@ subpparamlist :
     ;
 
 // Lista de expresiones
-explist : exp
-    | exp ','
-    explist
-    ;
-
-// Sentencias de control
-if : 'if' expcond '{' code '}' else;
-else : 'else' '{' code '}'
-    | 'else' if
+explist : exp explistP;
+explistP : ',' explist
     |
     ;
 
-while : 'while' '(' expcond ')' '{' code '}';
-
-dowhile : 'do' '{' code '}' 'while' '(' expcond ')' ';';
-
-for : 'for' '(' vardef ';' expcond ';' asig ')' '{' code '}'
-    | 'for' '(' asig ';' expcond ';' asig ')' '{' code '}';
-
-// Expresiones de condiciones para las sentencias de control
-expcond : factorcond expcondP;
-expcondP : oplog factorcond expcondP
-    |
-    ;
-
-// OR AND
-oplog : '||'
-    | '&'
-    ;
-
-// La expresión que va antes o después de un and u or
-factorcond : exp opcomp exp
-    | '(' expcond ')'
-    | '!' factorcond
-    ;
-
-opcomp : '<'
-    | '>'
-    | '<='
-    | '>='
-    | '=='
-    ;
 
 /* Analizador léxico */
+//g : (IDENTIFIER | CONST_DEF_IDENTIFIER | NUMERIC_INTEGER_CONST | NUMERIC_REAL_CONST |STRING_CONST)+;
 
-ESPACIO: ' ' -> skip;
-SALTOS: [\r\n\t] -> skip;
+SALTOS: [\r\n\t ]+ -> skip;
+
+COMENTARIO_PAREJA: ('/*') (ANYCHAR | NEW_LINE)* ('*/')->skip;
+COMENTARIO_SIMPLE: (BARRA_BARRA) (ANYCHAR)* NEW_LINE? ->skip;
+
 CONST_DEF_IDENTIFIER : ('_')* [A-Z]+ ([A-Z0-9]+ | '_')*;
 IDENTIFIER : ('_')* [a-zA-Z]+ ([a-zA-Z0-9]+ | '_')*;
+
 NUMERIC_REAL_CONST : ('+'|'-')? (([0-9]* '.' [0-9]+) | ([0-9]+ ('e' | 'E') ('+'|'-')? [0-9]+) | ([0-9]* '.' [0-9]+ ('e' | 'E') ('+'|'-')? [0-9]+));
 NUMERIC_INTEGER_CONST : ('+'|'-')? [0-9]+;
-STRING_CONST : (DOBLES | SIMPLES)+ {
+//hemos quitado las simples
+STRING_CONST : (DOBLES|SIMPLES) {
     String cadena = getText();
-    cadena = cadena.replace("'", "");
-    System.out.println("Token string: " + cadena);
+    cadena = cadena.replace("\\'", "'");
+    cadena = cadena.replace("\\\"", "\"");
+    cadena = cadena.substring(1, cadena.length()-1);
+    setText(cadena);
     };
-COMENTARIO_SIMPLE: (BARRA_BARRA) (ANYCHAR)* NEW_LINE? -> channel(HIDDEN);
-COMENTARIO_PAREJA: ('/*') (ANYCHAR | NEW_LINE)* ('*/') -> channel(HIDDEN);
 
 fragment
-DOBLES : ('"') (ANYCHAR | '\'' | (BARRA '"') | (BARRA '\''))*  ('"');
-SIMPLES :  ('\'') (ANYCHAR | (BARRA '\'') | (BARRA '"') | '"')* ('\'');
+DOBLES : ('"') (ANYCHARDOBLES | '\'' | (BARRA '"') | (BARRA '\''))*  ('"');
+SIMPLES :  ('\'') (ANYCHARSIMPLES | (BARRA '\'') | (BARRA '"') | '"')* ('\'');
+
 //RESERVADAS : ;
-PUNTO : [a-zA-Z0-9.] | ' ';
-BARRA : '\\' -> skip;
+BARRA : '\\';
 BARRA_BARRA : '//';
-ANYCHAR: ~[\r\n*/] | ~'\'';
+
+ANYCHARDOBLES: ~["\r\n] ;
+ANYCHARSIMPLES: ~['\r\n] ;
+
+ANYCHAR: ~[\r\t\n];
 NEW_LINE: [\r\n];

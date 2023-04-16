@@ -307,6 +307,16 @@ public interface CompilatorListener extends ParseTreeListener {
 	 */
 	void exitExplist(CompilatorParser.ExplistContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link CompilatorParser#explistP}.
+	 * @param ctx the parse tree
+	 */
+	void enterExplistP(CompilatorParser.ExplistPContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CompilatorParser#explistP}.
+	 * @param ctx the parse tree
+	 */
+	void exitExplistP(CompilatorParser.ExplistPContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link CompilatorParser#if}.
 	 * @param ctx the parse tree
 	 */
@@ -316,6 +326,16 @@ public interface CompilatorListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitIf(CompilatorParser.IfContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CompilatorParser#ifP}.
+	 * @param ctx the parse tree
+	 */
+	void enterIfP(CompilatorParser.IfPContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CompilatorParser#ifP}.
+	 * @param ctx the parse tree
+	 */
+	void exitIfP(CompilatorParser.IfPContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link CompilatorParser#else}.
 	 * @param ctx the parse tree
@@ -356,6 +376,16 @@ public interface CompilatorListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitFor(CompilatorParser.ForContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CompilatorParser#forP}.
+	 * @param ctx the parse tree
+	 */
+	void enterForP(CompilatorParser.ForPContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CompilatorParser#forP}.
+	 * @param ctx the parse tree
+	 */
+	void exitForP(CompilatorParser.ForPContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link CompilatorParser#expcond}.
 	 * @param ctx the parse tree

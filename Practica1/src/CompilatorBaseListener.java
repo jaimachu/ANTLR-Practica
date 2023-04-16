@@ -376,6 +376,18 @@ public class CompilatorBaseListener implements CompilatorListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterExplistP(CompilatorParser.ExplistPContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitExplistP(CompilatorParser.ExplistPContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterIf(CompilatorParser.IfContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -383,6 +395,18 @@ public class CompilatorBaseListener implements CompilatorListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitIf(CompilatorParser.IfContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterIfP(CompilatorParser.IfPContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIfP(CompilatorParser.IfPContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -431,6 +455,18 @@ public class CompilatorBaseListener implements CompilatorListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitFor(CompilatorParser.ForContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterForP(CompilatorParser.ForPContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitForP(CompilatorParser.ForPContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

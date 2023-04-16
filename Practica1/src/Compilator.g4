@@ -144,23 +144,26 @@ subpparamlist :
     ;
 
 // Lista de expresiones
-explist : exp
-    | exp ',' explist
+explist : exp explistP;
+explistP : ',' explist
+    |
     ;
 
 // Sentencias de control
-if : 'if' expcond '{' code '}' else;
-else : 'else' '{' code '}'
-    | 'else' if
+if : 'if' expcond '{' code '}' ifP;
+ifP : 'else' else
     |
     ;
+else : '{' code '}'
+    | if;
 
 while : 'while' '(' expcond ')' '{' code '}';
 
 dowhile : 'do' '{' code '}' 'while' '(' expcond ')' ';';
 
-for : 'for' '(' vardef ';' expcond ';' asig ')' '{' code '}'
-    | 'for' '(' asig ';' expcond ';' asig ')' '{' code '}';
+for : 'for' '(' forP;
+forP: vardef ';' expcond ';' asig ')' '{' code '}'
+    | asig ';' expcond ';' asig ')' '{' code '}';
 
 // Expresiones de condiciones para las sentencias de control
 expcond : factorcond expcondP;
