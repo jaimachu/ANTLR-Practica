@@ -1,6 +1,4 @@
 grammar Borrador;
-//g : (IDENTIFIER | CONST_DEF_IDENTIFIER | NUMERIC_INTEGER_CONST | NUMERIC_REAL_CONST |STRING_CONST | COMENTARIO_SIMPLE | COMENTARIO_PAREJA)+;
-
 // ---------------------------------------------------
 // ------------ANALIZADOR SINTÁCTICO------------------
 // ---------------------------------------------------
@@ -8,56 +6,47 @@ grammar Borrador;
 // Axioma
 program : dcllist funlist sentlist <EOF>;
 
-// ----------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
 // 1. DECLARACIÓN DE VARIABLES Y CONSTANTES
-// ----------------------------------------
-dcllist :
-    | dcl dcllist
-    ;
+// ---------------------------------------------------------------------------------------------------------------------
+
+dcllist :dcl dcllist
+    | ;
 
 // Declaración de una variable o constante
-dcl : ctelist
-    | varlist
-    ;
+dcl : ctedef
+    | vardef ';' ;
 
-// Estructura de una declaración de constante
-ctelist : '#define' CONST_DEF_IDENTIFIER simpvalue ctelistP  ;
-
-ctelistP : '#define' CONST_DEF_IDENTIFIER simpvalue ctelistP
-        |
-        ;
-
-// Estructura de una declaración de variable
-varlist : vardef ';' varlistP;
-
-varlistP :
-    vardef ';' varlistP
-	|
-	;
-
-vardef :
-    tbas IDENTIFIER vardefP
-    | tvoid IDENTIFIER vardefP;
-
-vardefP: '=' simpvalue | ;
+ctedef: '#define' CONST_DEF_IDENTIFIER simpvalue ;
 
 // Valor de la constante o variable
 simpvalue : NUMERIC_INTEGER_CONST
     | NUMERIC_REAL_CONST
-    | STRING_CONST
-    ;
+    | STRING_CONST ;
+
+// Estructura de una declaración de variable
+varlist : vardef ';' varlistP;
+varlistP :
+    vardef ';' varlistP
+	| ;
+
+
+
+vardef :tbas IDENTIFIER vardefP;
+vardefP: '=' simpvalue
+    | ;
 
 // Tipo de una variable
-tbas : 'integer'
+tbas: 'integer'
     | 'float'
     | 'string'
-    ;
+    | tvoid ;
+
 tvoid : 'void';
 
-
-// ----------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
 // 2. DECLARACIÓN DE FUNCIONES
-// ----------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
 
 funlist :
      funcdef funlist
@@ -67,79 +56,75 @@ funlist :
 funcdef : funchead '{' code '}';
 
 // Estructura de la cabecera de la función
-funchead : tbas IDENTIFIER '(' typedef1 ')'
-    |tvoid IDENTIFIER '(' typedef1 ')';
+funchead : tbas IDENTIFIER '(' typedef1 ')';
 
 // Parámetros de la función
 typedef1 :
-    | typedef2
-    ;
+    typedef2
+    | ;
 
-typedef2 : tbas IDENTIFIER t2Aux
-    |tvoid IDENTIFIER t2Aux;
+typedef2: tbas IDENTIFIER typedef2P;
 
-t2Aux: ',' typedef2P | ;
+typedef2P: ',' tbas IDENTIFIER typedef2P
+    | ;
 
-typedef2P :
-    tbas IDENTIFIER t2Aux
-    | tvoid IDENTIFIER t2Aux
-	;
 
-// ----------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
 // 3. DECLARACIÓN DEL CUERPO DEL PROGRAMA
-// ----------------------------------------
-sentlist: tvoid mainhead '{' code '}';
+// ---------------------------------------------------------------------------------------------------------------------
+sentlist:  mainhead '{' code '}';
 
 // Cabecera del programa principal
-mainhead : 'Main' '(' typedef1 ')';
+mainhead : tvoid 'Main' '(' typedef1 ')';
 
 // Código con sus respectivas sentencias
 code : sent code
-		|
-		;
-sent : IDENTIFIER sentAux |vardef ';';
+		| ;
 
-sentAux: asig ';'| funccall ';';
+sent : asig ';'
+    | funccall ';'
+    | vardef ';'
+    | return ';' ;
 
+return : 'return' exp;
 
 // Estructura de una asignación
-asig :  '=' exp;
+asig : IDENTIFIER '=' exp;
 
 // Estructura de una operación entre dos factores
 exp : factor expP;
+
 expP : op factor expP
-    |
-    ;
+    | ;
 
 op : '+'
     | '-'
     | '*'
     | 'DIV'
-    | 'MOD'
-    ;
+    | 'MOD' ;
 
 // Factor que puede ser un valor, una expresión entre paréntesis o una llamada a una función
 factor : simpvalue
     | '(' exp ')'
-    | IDENTIFIER funccall| CONST_DEF_IDENTIFIER funccall
-    ;
+    |  funccall ;
 
 // Estructura de una llamada a una función en las sentencias del código
-funccall : subpparamlist ;
+funccall : IDENTIFIER subpparamlist | CONST_DEF_IDENTIFIER ;
 
 // Lista de parámetros
 subpparamlist :
-    | '(' explist ')'
-    ;
+    '(' explist ')'
+    | ;
 
 // Lista de expresiones
 explist : exp explistP;
 
 
 explistP : ',' exp explistP
-    |
-    ;
+    | ;
 
+// ---------------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
 
 /* Analizador léxico */
 //g : (IDENTIFIER | CONST_DEF_IDENTIFIER | NUMERIC_INTEGER_CONST | NUMERIC_REAL_CONST |STRING_CONST)+;
