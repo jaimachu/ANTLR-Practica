@@ -1,10 +1,22 @@
-grammar Borrador;
+grammar Compilator;
 // ---------------------------------------------------
 // ------------ANALIZADOR SINTÁCTICO------------------
 // ---------------------------------------------------
 
 // Axioma
-program : dcllist funlist sentlist <EOF>;
+program :
+            dcllist
+            funlist[""]
+            sentlist {
+            String cadena = $funlist.cabecera;
+            String[] array = cadena.split("\n");
+            System.out.println("<h2>Funciones</h2>");
+            System.out.println("<ul>");
+            for (int i = 0; i < array.length; i++)
+                System.out.println("<li>" + array[i] + "</li>");
+            System.out.println("</ul>");
+            System.out.println("<hr/>");
+            }<EOF>;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // 1. DECLARACIÓN DE VARIABLES Y CONSTANTES
@@ -37,36 +49,59 @@ vardefP: '=' simpvalue
     | ;
 
 // Tipo de una variable
-tbas: 'integer'
-    | 'float'
-    | 'string'
-    | tvoid ;
+tbas returns [String v]
+    : 'integer' {$v = "integer ";}
+    | 'float' {$v = "float ";}
+    | 'string' {$v = "string ";};
 
-tvoid : 'void';
+tvoid returns [String v]
+    : 'void' {$v = "void ";};
 
 // ---------------------------------------------------------------------------------------------------------------------
 // 2. DECLARACIÓN DE FUNCIONES
 // ---------------------------------------------------------------------------------------------------------------------
 
-funlist :
-     funcdef funlist
-     | ;
+funlist[String list] returns [String cabecera]:
+     funcdef {$list = $list + $funcdef.h + "\n";} f1 = funlist[$list] {$cabecera = $f1.cabecera;}
+     | {$cabecera = $list;};
 
 // Estructura de la función
-funcdef : funchead '{' code '}';
+funcdef returns [String h]
+    : funchead '{' code '}'{
+        $h = $funchead.v;
+        //System.out.println($h);
+    };
 
 // Estructura de la cabecera de la función
-funchead : tbas IDENTIFIER '(' typedef1 ')';
+funchead returns [String v]
+    : tbas IDENTIFIER '(' typedef1 ')' {
+        $v = $tbas.v + $IDENTIFIER.text + " (" + $typedef1.v + ")";
+    }
+    | tvoid IDENTIFIER '(' typedef1 ')' {
+        $v = $tvoid.v + $IDENTIFIER.text + " (" + $typedef1.v + ")";
+    };
 
 // Parámetros de la función
-typedef1 :
-    typedef2
-    | ;
+typedef1 returns [String v]
+    : typedef2 {
+        $v = $typedef2.v;
+    }
+    | {
+        $v = "";
+    };
 
-typedef2: tbas IDENTIFIER typedef2P;
+typedef2 returns [String v]
+    : tbas IDENTIFIER typedef2P {
+        $v = $tbas.v + $IDENTIFIER.text + $typedef2P.v;
+    };
 
-typedef2P: ',' tbas IDENTIFIER typedef2P
-    | ;
+typedef2P returns [String v]
+    : ',' tbas IDENTIFIER typedef2P {
+        $v = ',' + $tbas.v + $IDENTIFIER.text + $typedef2P.v;
+    }
+    | {
+        $v = "";
+    };
 
 
 // ---------------------------------------------------------------------------------------------------------------------
