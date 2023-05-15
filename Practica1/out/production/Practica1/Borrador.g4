@@ -1,213 +1,198 @@
-grammar Borrador;
-//g : (IDENTIFIER | CONST_DEF_IDENTIFIER | NUMERIC_INTEGER_CONST | NUMERIC_REAL_CONST |STRING_CONST | COMENTARIO_SIMPLE | COMENTARIO_PAREJA)+;
-
-@parser::members{
-
-    private sintesis informacion;
-
-    public CompilatorParser ( TokenStream input, sintesis informacion){
-        this(input);
-        this.informacion = informacion;
-    }
-
-}
-
+grammar Compilator;
 // ---------------------------------------------------
 // ------------ANALIZADOR SINTÁCTICO------------------
 // ---------------------------------------------------
 
 // Axioma
-program : dcllist funlist sentlist <EOF>;
+program :
+            dcllist
+            funlist[""]
+            sentlist {
+            String cadena = $funlist.cabecera;
+            String[] array = cadena.split("\n");
+            System.out.println("<h2>Funciones</h2>");
+            System.out.println("<ul>");
+            for (int i = 0; i < array.length; i++)
+                System.out.println("<li>" + array[i] + "</li>");
+            System.out.println("</ul>");
+            System.out.println("<hr/>");
+            }<EOF>;
 
-// ----------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
 // 1. DECLARACIÓN DE VARIABLES Y CONSTANTES
-// ----------------------------------------
-dcllist :
-    | dcllist dcl
-    ;
+// ---------------------------------------------------------------------------------------------------------------------
+
+dcllist :dcl dcllist
+    | ;
 
 // Declaración de una variable o constante
-dcl : ctelist
-    | varlist
-    ;
+dcl : ctedef
+    | vardef ';' ;
 
-// Estructura de una declaración de constante
-ctelist : '#define' CONST_DEF_IDENTIFIER simpvalue ctelistP;
-ctelistP : '#define' CONST_DEF_IDENTIFIER simpvalue
-        |
-        ;
-
-// Estructura de una declaración de variable
-varlist : vardef ';' varlistP;
-varlistP : vardef ';'
-		|
-		;
-
-vardef : tbas IDENTIFIER
-    | tbas IDENTIFIER '=' simpvalue
-    ;
+ctedef: '#define' CONST_DEF_IDENTIFIER simpvalue ;
 
 // Valor de la constante o variable
 simpvalue : NUMERIC_INTEGER_CONST
     | NUMERIC_REAL_CONST
-    | STRING_CONST
-    ;
+    | STRING_CONST ;
+
+// Estructura de una declaración de variable
+varlist : vardef ';' varlistP;
+varlistP :
+    vardef ';' varlistP
+	| ;
+
+
+
+vardef :tbas IDENTIFIER vardefP;
+vardefP: '=' simpvalue
+    | ;
 
 // Tipo de una variable
-tbas : 'integer'
-    | 'float'
-    | 'string'
-    | tvoid
-    | struct
-    ;
+tbas returns [String v]
+    : 'integer' {$v = "integer ";}
+    | 'float' {$v = "float ";}
+    | 'string' {$v = "string ";};
 
-tvoid : 'void';
+tvoid returns [String v]
+    : 'void' {$v = "void ";};
 
-struct : 'struct' '{' varlist '}';
-
-// ----------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
 // 2. DECLARACIÓN DE FUNCIONES
-// ----------------------------------------
-funlist :
-    | funlist funcdef
-    ;
+// ---------------------------------------------------------------------------------------------------------------------
+
+funlist[String list] returns [String cabecera]:
+     funcdef {$list = $list + $funcdef.h + "\n";} f1 = funlist[$list] {$cabecera = $f1.cabecera;}
+     | {$cabecera = $list;};
 
 // Estructura de la función
-funcdef : funchead '{' code '}';
+funcdef returns [String h]
+    : funchead '{' code '}'{
+        $h = $funchead.v;
+        //System.out.println($h);
+    };
 
 // Estructura de la cabecera de la función
-funchead : tbas IDENTIFIER '(' typedef1 ')';
+funchead returns [String v]
+    : tbas IDENTIFIER '(' typedef1 ')' {
+        $v = $tbas.v + $IDENTIFIER.text + " (" + $typedef1.v + ")";
+    }
+    | tvoid IDENTIFIER '(' typedef1 ')' {
+        $v = $tvoid.v + $IDENTIFIER.text + " (" + $typedef1.v + ")";
+    };
 
 // Parámetros de la función
-typedef1 :
-    | typedef2
-    ;
+typedef1 returns [String v]
+    : typedef2 {
+        $v = $typedef2.v;
+    }
+    | {
+        $v = "";
+    };
 
-typedef2 : tbas IDENTIFIER typedef2P;
-typedef2P : ',' tbas IDENTIFIER typedef2P
-		|
-		;
+typedef2 returns [String v]
+    : tbas IDENTIFIER typedef2P {
+        $v = $tbas.v + $IDENTIFIER.text + $typedef2P.v;
+    };
 
-// ----------------------------------------
+typedef2P returns [String v]
+    : ',' tbas IDENTIFIER typedef2P {
+        $v = ',' + $tbas.v + $IDENTIFIER.text + $typedef2P.v;
+    }
+    | {
+        $v = "";
+    };
+
+
+// ---------------------------------------------------------------------------------------------------------------------
 // 3. DECLARACIÓN DEL CUERPO DEL PROGRAMA
-// ----------------------------------------
-sentlist: mainhead '{' code '}';
+// ---------------------------------------------------------------------------------------------------------------------
+sentlist:  mainhead '{' code '}';
 
 // Cabecera del programa principal
 mainhead : tvoid 'Main' '(' typedef1 ')';
 
 // Código con sus respectivas sentencias
 code : sent code
-		|
-		;
+		| ;
 
 sent : asig ';'
     | funccall ';'
     | vardef ';'
-    | if
-    | while
-    | dowhile
-    | for
-    ;
+    | return ';' ;
+
+return : 'return' exp;
 
 // Estructura de una asignación
 asig : IDENTIFIER '=' exp;
 
 // Estructura de una operación entre dos factores
 exp : factor expP;
+
 expP : op factor expP
-    |
-    ;
+    | ;
 
 op : '+'
     | '-'
     | '*'
     | 'DIV'
-    | 'MOD'
-    ;
+    | 'MOD' ;
 
 // Factor que puede ser un valor, una expresión entre paréntesis o una llamada a una función
 factor : simpvalue
     | '(' exp ')'
-    | funccall
-    ;
+    |  funccall ;
 
 // Estructura de una llamada a una función en las sentencias del código
-funccall : IDENTIFIER subpparamlist
-    | CONST_DEF_IDENTIFIER subpparamlist
-    ;
+funccall : IDENTIFIER subpparamlist | CONST_DEF_IDENTIFIER ;
 
 // Lista de parámetros
 subpparamlist :
-    | '(' explist ')'
-    ;
+    '(' explist ')'
+    | ;
 
 // Lista de expresiones
-explist : exp
-    | exp ','
-    explist
-    ;
+explist : exp explistP;
 
-// Sentencias de control
-if : 'if' expcond '{' code '}' else;
-else : 'else' '{' code '}'
-    | 'else' if
-    |
-    ;
 
-while : 'while' '(' expcond ')' '{' code '}';
+explistP : ',' exp explistP
+    | ;
 
-dowhile : 'do' '{' code '}' 'while' '(' expcond ')' ';';
-
-for : 'for' '(' vardef ';' expcond ';' asig ')' '{' code '}'
-    | 'for' '(' asig ';' expcond ';' asig ')' '{' code '}';
-
-// Expresiones de condiciones para las sentencias de control
-expcond : factorcond expcondP;
-expcondP : oplog factorcond expcondP
-    |
-    ;
-
-// OR AND
-oplog : '||'
-    | '&'
-    ;
-
-// La expresión que va antes o después de un and u or
-factorcond : exp opcomp exp
-    | '(' expcond ')'
-    | '!' factorcond
-    ;
-
-opcomp : '<'
-    | '>'
-    | '<='
-    | '>='
-    | '=='
-    ;
+// ---------------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
 
 /* Analizador léxico */
+//g : (IDENTIFIER | CONST_DEF_IDENTIFIER | NUMERIC_INTEGER_CONST | NUMERIC_REAL_CONST |STRING_CONST)+;
 
-ESPACIO: ' ' -> skip;
-SALTOS: [\r\n\t] -> skip;
+SALTOS: [\r\n\t ]+ -> skip;
+
+COMENTARIO_PAREJA: ('/*') (ANYCHAR | NEW_LINE)* ('*/')->skip;
+COMENTARIO_SIMPLE: (BARRA_BARRA) (ANYCHAR)* NEW_LINE? ->skip;
+
 CONST_DEF_IDENTIFIER : ('_')* [A-Z]+ ([A-Z0-9]+ | '_')*;
 IDENTIFIER : ('_')* [a-zA-Z]+ ([a-zA-Z0-9]+ | '_')*;
+
 NUMERIC_REAL_CONST : ('+'|'-')? (([0-9]* '.' [0-9]+) | ([0-9]+ ('e' | 'E') ('+'|'-')? [0-9]+) | ([0-9]* '.' [0-9]+ ('e' | 'E') ('+'|'-')? [0-9]+));
 NUMERIC_INTEGER_CONST : ('+'|'-')? [0-9]+;
-STRING_CONST : (DOBLES | SIMPLES)+ {
+//hemos quitado las simples
+STRING_CONST : (DOBLES|SIMPLES) {
     String cadena = getText();
-    cadena = cadena.replace("'", "");
-    System.out.println("Token string: " + cadena);
+    cadena = cadena.replace("\\'", "'");
+    cadena = cadena.replace("\\\"", "\"");
+    cadena = cadena.substring(1, cadena.length()-1);
+    setText(cadena);
     };
-COMENTARIO_SIMPLE: (BARRA_BARRA) (ANYCHAR)* NEW_LINE? -> channel(HIDDEN);
-COMENTARIO_PAREJA: ('/*') (ANYCHAR | NEW_LINE)* ('*/') -> channel(HIDDEN);
 
 fragment
-DOBLES : ('"') (ANYCHAR | '\'' | (BARRA '"') | (BARRA '\''))*  ('"');
-SIMPLES :  ('\'') (ANYCHAR | (BARRA '\'') | (BARRA '"') | '"')* ('\'');
+DOBLES : ('"') (ANYCHARDOBLES | '\'' | (BARRA '"') | (BARRA '\''))*  ('"');
+SIMPLES :  ('\'') (ANYCHARSIMPLES | (BARRA '\'') | (BARRA '"') | '"')* ('\'');
+
 //RESERVADAS : ;
-PUNTO : [a-zA-Z0-9.] | ' ';
-BARRA : '\\' -> skip;
+BARRA : '\\';
 BARRA_BARRA : '//';
-ANYCHAR: ~[\r\n*/] | ~'\'';
+
+ANYCHARDOBLES: ~["\r\n] ;
+ANYCHARSIMPLES: ~['\r\n] ;
+
+ANYCHAR: ~[\r\t\n];
 NEW_LINE: [\r\n];

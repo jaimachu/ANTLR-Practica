@@ -17,8 +17,7 @@ public class ClasePrincipal {
 // sintactico
             CommonTokenStream tokens = new CommonTokenStream(analex);
 // Crear el objeto correspondiente al analizador sintáctico
-            sintesis datos = new sintesis();
-            CompilatorParser anasint = new CompilatorParser(tokens, datos);
+            CompilatorParser anasint = new CompilatorParser(tokens);
             anasint.removeErrorListeners();
             anasint.addErrorListener(new CompilatorErrorListener());
             anasint.program();

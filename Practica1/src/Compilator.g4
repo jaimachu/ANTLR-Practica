@@ -1,194 +1,207 @@
 grammar Compilator;
-//g : (IDENTIFIER | CONST_DEF_IDENTIFIER | NUMERIC_INTEGER_CONST | NUMERIC_REAL_CONST |STRING_CONST | COMENTARIO_SIMPLE | COMENTARIO_PAREJA)+;
-
-
-@parser::members{
-
-    private sintesis informacion;
-
-    public CompilatorParser ( TokenStream input, sintesis informacion){
-        this(input);
-        this.informacion = informacion;
-    }
-
+@header{
+    import java.io.File;
+    import java.io.FileWriter;
 }
-
 // ---------------------------------------------------
 // ------------ANALIZADOR SINTÁCTICO------------------
 // ---------------------------------------------------
 
 // Axioma
-program : dcllist funlist sentlist <EOF>;
+program :
+            dcllist
+            funlist["", ""]
+            sentlist {
+                try{
+                    File archivo = new File("ejemplo.html");
+                    FileWriter escribir=new FileWriter(archivo,false);
 
-// ----------------------------------------
+                    String cadena = $funlist.cabecera;
+                    String[] array = cadena.split("\n");
+                    escribir.write("<style> .palres{font-weight: bold;} .ident{color: blue;} .cte{color: green} </style>");
+                    escribir.write("<h2>Funciones</h2>\n");
+                    escribir.write("<ul>\n");
+                    for (int i = 0; i < array.length; i++)
+                        escribir.write("    <li>" + array[i] + "</li>\n");
+                    escribir.write("</ul>\n");
+                    escribir.write("<hr/>\n");
+                    escribir.write($funlist.vc);
+                    escribir.close();
+                }catch (Exception e){
+                    System.out.println("Error al escribir");
+                }
+            }<EOF>;
+
+// ---------------------------------------------------------------------------------------------------------------------
 // 1. DECLARACIÓN DE VARIABLES Y CONSTANTES
-// ----------------------------------------
-dcllist :
-    | dcl dcllist
-    ;
+// ---------------------------------------------------------------------------------------------------------------------
+
+dcllist :dcl dcllist
+    | ;
 
 // Declaración de una variable o constante
-dcl : ctelist
-    | varlist
-    ;
+dcl : ctedef
+    | vardef ';' ;
 
-// Estructura de una declaración de constante
-ctelist : '#define' CONST_DEF_IDENTIFIER simpvalue ctelistP;
-ctelistP : '#define' CONST_DEF_IDENTIFIER simpvalue
-        |
-        ;
+ctedef: '#define' CONST_DEF_IDENTIFIER simpvalue ;
+
+// Valor de la constante o variable
+simpvalue returns[String vc]
+    : NUMERIC_INTEGER_CONST {$vc = "<SPAN CLASS=\"cte\">"+ $NUMERIC_INTEGER_CONST.text +"</SPAN>";}
+    | NUMERIC_REAL_CONST {$vc = "<SPAN CLASS=\"cte\">"+ $NUMERIC_REAL_CONST.text +"</SPAN>";}
+    | STRING_CONST {$vc = "<SPAN CLASS=\"cte\">"+ $STRING_CONST.text +"</SPAN>";};
 
 // Estructura de una declaración de variable
 varlist : vardef ';' varlistP;
-varlistP : vardef ';'
-		|
-		;
+varlistP :
+    vardef ';' varlistP
+	| ;
 
-vardef : tbas IDENTIFIER {String cadena = $IDENTIFIER.text; informacion.existeIdent(cadena); informacion.newIdent(cadena);}
-    | tbas IDENTIFIER '=' simpvalue
-    ;
 
-// Valor de la constante o variable
-simpvalue : NUMERIC_INTEGER_CONST
-    | NUMERIC_REAL_CONST
-    | STRING_CONST
-    ;
+
+vardef :tbas IDENTIFIER vardefP;
+vardefP: '=' simpvalue
+    | ;
 
 // Tipo de una variable
-tbas : 'integer'
-    | 'float'
-    | 'string'
-    | tvoid
-    | struct
-    ;
+tbas returns [String v, String vc]
+    : 'integer' {
+        $v = "integer ";
+        $vc = "<SPAN CLASS=\"palres\"> integer </SPAN>\n";
+    }
+    | 'float' {
+        $v = "float ";
+        $vc = "<SPAN CLASS=\"palres\"> float </SPAN>\n";
+    }
+    | 'string' {
+        $v = "string ";
+        $vc = "<SPAN CLASS=\"palres\"> string </SPAN>\n";
+    };
 
-tvoid : 'void';
+tvoid returns [String v, String vc]
+    : 'void' {
+        $v = "void ";
+        $vc = "<SPAN CLASS=\"palres\"> void </SPAN>\n";
+    };
 
-struct : 'struct' '{' varlist '}';
-
-// ----------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
 // 2. DECLARACIÓN DE FUNCIONES
-// ----------------------------------------
-funlist :
-    | funcdef funlist
-    ;
+// ---------------------------------------------------------------------------------------------------------------------
+
+funlist[String list, String listFunc] returns [String cabecera, String vc]:
+     funcdef {$list = $list + $funcdef.h + "\n"; $listFunc = $listFunc + $funcdef.vc;} f1 = funlist[$list, $listFunc] {$cabecera = $f1.cabecera; $vc = $f1.vc;}
+     | {$cabecera = $list; $vc = $listFunc;};
 
 // Estructura de la función
-funcdef : funchead '{' code '}';
+funcdef returns [String h, String vc]
+    : funchead '{' code '}'{
+        $h = $funchead.v;
+
+        $vc = $funchead.vc + "<span>{</span>" + "<span>}</span>" + "<BR/>";
+    };
 
 // Estructura de la cabecera de la función
-funchead : tbas IDENTIFIER '(' typedef1 ')';
+funchead returns [String v, String vc]
+    : tbas IDENTIFIER '(' typedef1 ')' {
+        $v = $tbas.v + $IDENTIFIER.text + " <span>(</span>" + $typedef1.v + "<span>)</span>";
+
+        String identifier = "<SPAN CLASS=\"ident\">" + $IDENTIFIER.text +"</SPAN\n";
+        $vc = $tbas.vc + identifier + " <span>(</span>" + $typedef1.vc + " <span>)</span>";
+    }
+    | tvoid IDENTIFIER '(' typedef1 ')' {
+        $v = $tvoid.v + $IDENTIFIER.text + "<span>(</span>" + $typedef1.v + "<span>)</span>";
+
+        String identifier = "<SPAN CLASS=\"ident\">" + $IDENTIFIER.text +"</SPAN\n";
+        $vc = $tvoid.vc + identifier + " <span>(</span>" + $typedef1.vc + " <span>)</span>";
+    };
 
 // Parámetros de la función
-typedef1 :
-    | typedef2
-    ;
+typedef1 returns [String v, String vc]
+    : typedef2 {
+        $v = $typedef2.v;
+        $vc = $typedef2.vc;
+    }
+    | {
+        $v = "";
+        $vc = "";
+    };
 
-typedef2 : tbas IDENTIFIER typedef2P;
-typedef2P : ',' tbas IDENTIFIER typedef2P
-		|
-		;
+typedef2 returns [String v, String vc]
+    : tbas IDENTIFIER typedef2P {
+        $v = $tbas.v + $IDENTIFIER.text + $typedef2P.v;
 
-// ----------------------------------------
+        String identifier = "<SPAN CLASS=\"ident\">" + $IDENTIFIER.text +"</SPAN\n";
+        $vc = $tbas.vc + identifier + $typedef2P.vc;
+    };
+
+typedef2P returns [String v, String vc]
+    : ',' tbas IDENTIFIER t1 = typedef2P {
+        $v = ',' + $tbas.v + $IDENTIFIER.text + $typedef2P.v;
+        String identifier = "<SPAN CLASS=\"ident\">" + $IDENTIFIER.text +"</SPAN\n";
+        $vc = $tbas.vc + identifier + $t1.vc;
+    }
+    | {
+        $v = "";
+        $vc = "";
+    };
+
+
+// ---------------------------------------------------------------------------------------------------------------------
 // 3. DECLARACIÓN DEL CUERPO DEL PROGRAMA
-// ----------------------------------------
-sentlist: mainhead '{' code '}';
+// ---------------------------------------------------------------------------------------------------------------------
+sentlist:  mainhead '{' code '}';
 
 // Cabecera del programa principal
 mainhead : tvoid 'Main' '(' typedef1 ')';
 
 // Código con sus respectivas sentencias
 code : sent code
-		|
-		;
+		| ;
 
 sent : asig ';'
     | funccall ';'
     | vardef ';'
-    | if
-    | while
-    | dowhile
-    | for
-    ;
+    | return ';' ;
+
+return : 'return' exp;
 
 // Estructura de una asignación
 asig : IDENTIFIER '=' exp;
 
 // Estructura de una operación entre dos factores
 exp : factor expP;
+
 expP : op factor expP
-    |
-    ;
+    | ;
 
 op : '+'
     | '-'
     | '*'
     | 'DIV'
-    | 'MOD'
-    ;
+    | 'MOD' ;
 
 // Factor que puede ser un valor, una expresión entre paréntesis o una llamada a una función
 factor : simpvalue
     | '(' exp ')'
-    | funccall
-    ;
+    |  funccall ;
 
 // Estructura de una llamada a una función en las sentencias del código
-funccall : IDENTIFIER subpparamlist
-    | CONST_DEF_IDENTIFIER subpparamlist
-    ;
+funccall : IDENTIFIER subpparamlist | CONST_DEF_IDENTIFIER ;
 
 // Lista de parámetros
 subpparamlist :
-    | '(' explist ')'
-    ;
+    '(' explist ')'
+    | ;
 
 // Lista de expresiones
 explist : exp explistP;
-explistP : ',' explist
-    |
-    ;
 
-// Sentencias de control
-if : 'if' expcond '{' code '}' ifP;
-ifP : 'else' else
-    |
-    ;
-else : '{' code '}'
-    | if;
 
-while : 'while' '(' expcond ')' '{' code '}';
+explistP : ',' exp explistP
+    | ;
 
-dowhile : 'do' '{' code '}' 'while' '(' expcond ')' ';';
-
-for : 'for' '(' forP;
-forP: vardef ';' expcond ';' asig ')' '{' code '}'
-    | asig ';' expcond ';' asig ')' '{' code '}';
-
-// Expresiones de condiciones para las sentencias de control
-expcond : factorcond expcondP;
-expcondP : oplog factorcond expcondP
-    |
-    ;
-
-// OR AND
-oplog : '||'
-    | '&'
-    ;
-
-// La expresión que va antes o después de un and u or
-factorcond : exp opcomp exp
-    | '(' expcond ')'
-    | '!' factorcond
-    ;
-
-opcomp : '<'
-    | '>'
-    | '<='
-    | '>='
-    | '=='
-    ;
-
+// ---------------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
 
 /* Analizador léxico */
 //g : (IDENTIFIER | CONST_DEF_IDENTIFIER | NUMERIC_INTEGER_CONST | NUMERIC_REAL_CONST |STRING_CONST)+;
