@@ -150,25 +150,30 @@ public class CompilatorParser extends Parser {
 			setState(62);
 			dcllist();
 			setState(63);
-			((ProgramContext)_localctx).funlist = funlist("", "");
+			((ProgramContext)_localctx).funlist = funlist("", "", "");
 			setState(64);
 			sentlist();
 
 			                try{
+			                    String cadena = ((ProgramContext)_localctx).funlist.cabecera;
+			                    String funcName = ((ProgramContext)_localctx).funlist.funcName;
+			                    String[] listFunc = cadena.split("\n");
+			                    String[] listFuncName = funcName.split("\n");
+
 			                    File archivo = new File("ejemplo.html");
 			                    FileWriter escribir=new FileWriter(archivo,false);
-
-			                    String cadena = ((ProgramContext)_localctx).funlist.cabecera;
-			                    String[] array = cadena.split("\n");
 			                    escribir.write("<style> .palres{font-weight: bold;} .ident{color: blue;} .cte{color: green} </style>");
+			                    escribir.write("<h1>Programa: XXXX</h1>\n");
 			                    escribir.write("<h2>Funciones</h2>\n");
 			                    escribir.write("<ul>\n");
-			                    for (int i = 0; i < array.length; i++)
-			                        escribir.write("    <li>" + array[i] + "</li>\n");
+			                    for (int i = 0; i < listFunc.length; i++){
+			                        String nombre = listFuncName[i];
+			                        String enlace = "<a href=\"" + nombre + "\">" + listFunc[i] + "</a>";
+			                        escribir.write("    <li>" + enlace + "</li>\n");
+			                    }
 			                    escribir.write("</ul>\n");
 			                    escribir.write("<hr/>\n");
 			                    escribir.write(((ProgramContext)_localctx).funlist.vc);
-			                    System.out.println(((ProgramContext)_localctx).funlist.vc);
 			                    escribir.close();
 			                }catch (Exception e){
 			                    System.out.println("Error al escribir");
@@ -633,8 +638,8 @@ public class CompilatorParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class TbasContext extends ParserRuleContext {
-		public String v;
 		public String vc;
+		public String value;
 		public TbasContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -662,8 +667,8 @@ public class CompilatorParser extends Parser {
 				setState(111);
 				match(T__3);
 
-				        ((TbasContext)_localctx).v =  "integer ";
-				        ((TbasContext)_localctx).vc =  "<SPAN CLASS=\"palres\"> integer </SPAN>\n";
+				        ((TbasContext)_localctx).value =  "integer ";
+				        ((TbasContext)_localctx).vc =  "<SPAN CLASS=\"palres\"> integer </SPAN>";
 				    
 				}
 				break;
@@ -673,8 +678,8 @@ public class CompilatorParser extends Parser {
 				setState(113);
 				match(T__4);
 
-				        ((TbasContext)_localctx).v =  "float ";
-				        ((TbasContext)_localctx).vc =  "<SPAN CLASS=\"palres\"> float </SPAN>\n";
+				        ((TbasContext)_localctx).value =  "float ";
+				        ((TbasContext)_localctx).vc =  "<SPAN CLASS=\"palres\"> float </SPAN>";
 				    
 				}
 				break;
@@ -684,8 +689,8 @@ public class CompilatorParser extends Parser {
 				setState(115);
 				match(T__5);
 
-				        ((TbasContext)_localctx).v =  "string ";
-				        ((TbasContext)_localctx).vc =  "<SPAN CLASS=\"palres\"> string </SPAN>\n";
+				        ((TbasContext)_localctx).value =  "string ";
+				        ((TbasContext)_localctx).vc =  "<SPAN CLASS=\"palres\"> string </SPAN>";
 				    
 				}
 				break;
@@ -706,8 +711,8 @@ public class CompilatorParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class TvoidContext extends ParserRuleContext {
-		public String v;
 		public String vc;
+		public String value;
 		public TvoidContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -731,8 +736,8 @@ public class CompilatorParser extends Parser {
 			setState(119);
 			match(T__6);
 
-			        ((TvoidContext)_localctx).v =  "void ";
-			        ((TvoidContext)_localctx).vc =  "<SPAN CLASS=\"palres\"> void </SPAN>\n";
+			        ((TvoidContext)_localctx).value =  "void ";
+			        ((TvoidContext)_localctx).vc =  "<SPAN CLASS=\"palres\"> void </SPAN>";
 			    
 			}
 		}
@@ -749,10 +754,12 @@ public class CompilatorParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class FunlistContext extends ParserRuleContext {
-		public String list;
+		public String listCab;
 		public String listFunc;
+		public String listFuncName;
 		public String cabecera;
 		public String vc;
+		public String funcName;
 		public FuncdefContext funcdef;
 		public FunlistContext f1;
 		public FuncdefContext funcdef() {
@@ -762,10 +769,11 @@ public class CompilatorParser extends Parser {
 			return getRuleContext(FunlistContext.class,0);
 		}
 		public FunlistContext(ParserRuleContext parent, int invokingState) { super(parent, invokingState); }
-		public FunlistContext(ParserRuleContext parent, int invokingState, String list, String listFunc) {
+		public FunlistContext(ParserRuleContext parent, int invokingState, String listCab, String listFunc, String listFuncName) {
 			super(parent, invokingState);
-			this.list = list;
+			this.listCab = listCab;
 			this.listFunc = listFunc;
+			this.listFuncName = listFuncName;
 		}
 		@Override public int getRuleIndex() { return RULE_funlist; }
 		@Override
@@ -778,8 +786,8 @@ public class CompilatorParser extends Parser {
 		}
 	}
 
-	public final FunlistContext funlist(String list,String listFunc) throws RecognitionException {
-		FunlistContext _localctx = new FunlistContext(_ctx, getState(), list, listFunc);
+	public final FunlistContext funlist(String listCab,String listFunc,String listFuncName) throws RecognitionException {
+		FunlistContext _localctx = new FunlistContext(_ctx, getState(), listCab, listFunc, listFuncName);
 		enterRule(_localctx, 22, RULE_funlist);
 		try {
 			setState(128);
@@ -790,16 +798,28 @@ public class CompilatorParser extends Parser {
 				{
 				setState(122);
 				((FunlistContext)_localctx).funcdef = funcdef();
-				((FunlistContext)_localctx).list =  _localctx.list + ((FunlistContext)_localctx).funcdef.h + "\n"; ((FunlistContext)_localctx).listFunc =  _localctx.listFunc + ((FunlistContext)_localctx).funcdef.vc;
+
+				        ((FunlistContext)_localctx).listCab =  _localctx.listCab + ((FunlistContext)_localctx).funcdef.cabecera + "\n";
+				        ((FunlistContext)_localctx).listFunc =  _localctx.listFunc + ((FunlistContext)_localctx).funcdef.vc;
+				        ((FunlistContext)_localctx).listFuncName =  _localctx.listFuncName + ((FunlistContext)_localctx).funcdef.funcName + "\n";
+				     
 				setState(124);
-				((FunlistContext)_localctx).f1 = funlist(_localctx.list, _localctx.listFunc);
-				((FunlistContext)_localctx).cabecera =  ((FunlistContext)_localctx).f1.cabecera; ((FunlistContext)_localctx).vc =  ((FunlistContext)_localctx).f1.vc;
+				((FunlistContext)_localctx).f1 = funlist(_localctx.listCab, _localctx.listFunc, _localctx.listFuncName);
+
+				        ((FunlistContext)_localctx).cabecera =  ((FunlistContext)_localctx).f1.cabecera;
+				        ((FunlistContext)_localctx).vc =  ((FunlistContext)_localctx).f1.vc;
+				        ((FunlistContext)_localctx).funcName =  ((FunlistContext)_localctx).f1.funcName;
+				     
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				((FunlistContext)_localctx).cabecera =  _localctx.list; ((FunlistContext)_localctx).vc =  _localctx.listFunc;
+
+				        ((FunlistContext)_localctx).cabecera =  _localctx.listCab;
+				        ((FunlistContext)_localctx).vc =  _localctx.listFunc;
+				        ((FunlistContext)_localctx).funcName =  _localctx.listFuncName;
+				    
 				}
 				break;
 			}
@@ -817,8 +837,9 @@ public class CompilatorParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class FuncdefContext extends ParserRuleContext {
-		public String h;
+		public String cabecera;
 		public String vc;
+		public String funcName;
 		public FuncheadContext funchead;
 		public FuncheadContext funchead() {
 			return getRuleContext(FuncheadContext.class,0);
@@ -855,9 +876,11 @@ public class CompilatorParser extends Parser {
 			setState(133);
 			match(T__8);
 
-			        ((FuncdefContext)_localctx).h =  ((FuncdefContext)_localctx).funchead.v;
+			        ((FuncdefContext)_localctx).cabecera =  ((FuncdefContext)_localctx).funchead.valueCab;
 
-			        ((FuncdefContext)_localctx).vc =  ((FuncdefContext)_localctx).funchead.vc + "<span>{</span>" + "<span>}</span>" + "<BR/>";
+			        ((FuncdefContext)_localctx).funcName =  ((FuncdefContext)_localctx).funchead.funcName;
+
+			        ((FuncdefContext)_localctx).vc =  ((FuncdefContext)_localctx).funchead.vc + "<span>{</span>" + "<BR/>" + "<BR/>" +"<span>}</span>" + "<BR/>";
 			    
 			}
 		}
@@ -874,8 +897,9 @@ public class CompilatorParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class FuncheadContext extends ParserRuleContext {
-		public String v;
 		public String vc;
+		public String valueCab;
+		public String funcName;
 		public TbasContext tbas;
 		public Token IDENTIFIER;
 		public Typedef1Context typedef1;
@@ -927,9 +951,11 @@ public class CompilatorParser extends Parser {
 				setState(140);
 				match(T__10);
 
-				        ((FuncheadContext)_localctx).v =  ((FuncheadContext)_localctx).tbas.v + (((FuncheadContext)_localctx).IDENTIFIER!=null?((FuncheadContext)_localctx).IDENTIFIER.getText():null) + " <span>(</span>" + ((FuncheadContext)_localctx).typedef1.v + "<span>)</span>";
+				        ((FuncheadContext)_localctx).valueCab =  ((FuncheadContext)_localctx).tbas.value + (((FuncheadContext)_localctx).IDENTIFIER!=null?((FuncheadContext)_localctx).IDENTIFIER.getText():null) + "(" + ((FuncheadContext)_localctx).typedef1.value + ")";
 
-				        String identifier = "<SPAN CLASS=\"ident\">" + (((FuncheadContext)_localctx).IDENTIFIER!=null?((FuncheadContext)_localctx).IDENTIFIER.getText():null) +"</SPAN\n";
+				        ((FuncheadContext)_localctx).funcName =  (((FuncheadContext)_localctx).IDENTIFIER!=null?((FuncheadContext)_localctx).IDENTIFIER.getText():null);
+
+				        String identifier = "<SPAN CLASS=\"ident\">" + (((FuncheadContext)_localctx).IDENTIFIER!=null?((FuncheadContext)_localctx).IDENTIFIER.getText():null) +"</SPAN";
 				        ((FuncheadContext)_localctx).vc =  ((FuncheadContext)_localctx).tbas.vc + identifier + " <span>(</span>" + ((FuncheadContext)_localctx).typedef1.vc + " <span>)</span>";
 				    
 				}
@@ -948,9 +974,11 @@ public class CompilatorParser extends Parser {
 				setState(147);
 				match(T__10);
 
-				        ((FuncheadContext)_localctx).v =  ((FuncheadContext)_localctx).tvoid.v + (((FuncheadContext)_localctx).IDENTIFIER!=null?((FuncheadContext)_localctx).IDENTIFIER.getText():null) + "<span>(</span>" + ((FuncheadContext)_localctx).typedef1.v + "<span>)</span>";
+				        ((FuncheadContext)_localctx).valueCab =  ((FuncheadContext)_localctx).tvoid.value + (((FuncheadContext)_localctx).IDENTIFIER!=null?((FuncheadContext)_localctx).IDENTIFIER.getText():null) + "(" + ((FuncheadContext)_localctx).typedef1.value + ")";
 
-				        String identifier = "<SPAN CLASS=\"ident\">" + (((FuncheadContext)_localctx).IDENTIFIER!=null?((FuncheadContext)_localctx).IDENTIFIER.getText():null) +"</SPAN\n";
+				        ((FuncheadContext)_localctx).funcName =  (((FuncheadContext)_localctx).IDENTIFIER!=null?((FuncheadContext)_localctx).IDENTIFIER.getText():null);
+
+				        String identifier = "<SPAN CLASS=\"ident\">" + (((FuncheadContext)_localctx).IDENTIFIER!=null?((FuncheadContext)_localctx).IDENTIFIER.getText():null) +"</SPAN";
 				        ((FuncheadContext)_localctx).vc =  ((FuncheadContext)_localctx).tvoid.vc + identifier + " <span>(</span>" + ((FuncheadContext)_localctx).typedef1.vc + " <span>)</span>";
 				    
 				}
@@ -972,8 +1000,8 @@ public class CompilatorParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class Typedef1Context extends ParserRuleContext {
-		public String v;
 		public String vc;
+		public String value;
 		public Typedef2Context typedef2;
 		public Typedef2Context typedef2() {
 			return getRuleContext(Typedef2Context.class,0);
@@ -1007,7 +1035,7 @@ public class CompilatorParser extends Parser {
 				setState(152);
 				((Typedef1Context)_localctx).typedef2 = typedef2();
 
-				        ((Typedef1Context)_localctx).v =  ((Typedef1Context)_localctx).typedef2.v;
+				        ((Typedef1Context)_localctx).value =  ((Typedef1Context)_localctx).typedef2.value;
 				        ((Typedef1Context)_localctx).vc =  ((Typedef1Context)_localctx).typedef2.vc;
 				    
 				}
@@ -1016,7 +1044,7 @@ public class CompilatorParser extends Parser {
 				enterOuterAlt(_localctx, 2);
 				{
 
-				        ((Typedef1Context)_localctx).v =  "";
+				        ((Typedef1Context)_localctx).value =  "";
 				        ((Typedef1Context)_localctx).vc =  "";
 				    
 				}
@@ -1038,8 +1066,8 @@ public class CompilatorParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class Typedef2Context extends ParserRuleContext {
-		public String v;
 		public String vc;
+		public String value;
 		public TbasContext tbas;
 		public Token IDENTIFIER;
 		public Typedef2PContext typedef2P;
@@ -1077,9 +1105,9 @@ public class CompilatorParser extends Parser {
 			setState(160);
 			((Typedef2Context)_localctx).typedef2P = typedef2P();
 
-			        ((Typedef2Context)_localctx).v =  ((Typedef2Context)_localctx).tbas.v + (((Typedef2Context)_localctx).IDENTIFIER!=null?((Typedef2Context)_localctx).IDENTIFIER.getText():null) + ((Typedef2Context)_localctx).typedef2P.v;
+			        ((Typedef2Context)_localctx).value =  ((Typedef2Context)_localctx).tbas.value + (((Typedef2Context)_localctx).IDENTIFIER!=null?((Typedef2Context)_localctx).IDENTIFIER.getText():null) + ((Typedef2Context)_localctx).typedef2P.value;
 
-			        String identifier = "<SPAN CLASS=\"ident\">" + (((Typedef2Context)_localctx).IDENTIFIER!=null?((Typedef2Context)_localctx).IDENTIFIER.getText():null) +"</SPAN\n";
+			        String identifier = "<SPAN CLASS=\"ident\">" + (((Typedef2Context)_localctx).IDENTIFIER!=null?((Typedef2Context)_localctx).IDENTIFIER.getText():null) +"</SPAN";
 			        ((Typedef2Context)_localctx).vc =  ((Typedef2Context)_localctx).tbas.vc + identifier + ((Typedef2Context)_localctx).typedef2P.vc;
 			    
 			}
@@ -1097,8 +1125,8 @@ public class CompilatorParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class Typedef2PContext extends ParserRuleContext {
-		public String v;
 		public String vc;
+		public String value;
 		public TbasContext tbas;
 		public Token IDENTIFIER;
 		public Typedef2PContext t1;
@@ -1143,9 +1171,11 @@ public class CompilatorParser extends Parser {
 				setState(166);
 				((Typedef2PContext)_localctx).t1 = ((Typedef2PContext)_localctx).typedef2P = typedef2P();
 
-				        ((Typedef2PContext)_localctx).v =  ',' + ((Typedef2PContext)_localctx).tbas.v + (((Typedef2PContext)_localctx).IDENTIFIER!=null?((Typedef2PContext)_localctx).IDENTIFIER.getText():null) + ((Typedef2PContext)_localctx).typedef2P.v;
-				        String identifier = "<SPAN CLASS=\"ident\">" + (((Typedef2PContext)_localctx).IDENTIFIER!=null?((Typedef2PContext)_localctx).IDENTIFIER.getText():null) +"</SPAN\n";
-				        ((Typedef2PContext)_localctx).vc =  ((Typedef2PContext)_localctx).tbas.vc + identifier + ((Typedef2PContext)_localctx).t1.vc;
+				        ((Typedef2PContext)_localctx).value =  "," + ((Typedef2PContext)_localctx).tbas.value + (((Typedef2PContext)_localctx).IDENTIFIER!=null?((Typedef2PContext)_localctx).IDENTIFIER.getText():null) + (((Typedef2PContext)_localctx).typedef2P!=null?_input.getText(((Typedef2PContext)_localctx).typedef2P.start,((Typedef2PContext)_localctx).typedef2P.stop):null);
+
+				        String identifier = "<SPAN CLASS=\"ident\">" + (((Typedef2PContext)_localctx).IDENTIFIER!=null?((Typedef2PContext)_localctx).IDENTIFIER.getText():null) +"</SPAN";
+				        String coma = "<span>,</span>";
+				        ((Typedef2PContext)_localctx).vc =  coma + ((Typedef2PContext)_localctx).tbas.vc + identifier + ((Typedef2PContext)_localctx).t1.vc;
 				    
 				}
 				break;
@@ -1153,7 +1183,7 @@ public class CompilatorParser extends Parser {
 				enterOuterAlt(_localctx, 2);
 				{
 
-				        ((Typedef2PContext)_localctx).v =  "";
+				        ((Typedef2PContext)_localctx).value =  "";
 				        ((Typedef2PContext)_localctx).vc =  "";
 				    
 				}

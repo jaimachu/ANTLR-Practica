@@ -10,19 +10,25 @@ grammar Compilator;
 // Axioma
 program :
             dcllist
-            funlist["", ""]
+            funlist["", "", ""]
             sentlist {
                 try{
+                    String cadena = $funlist.cabecera;
+                    String funcName = $funlist.funcName;
+                    String[] listFunc = cadena.split("\n");
+                    String[] listFuncName = funcName.split("\n");
+
                     File archivo = new File("ejemplo.html");
                     FileWriter escribir=new FileWriter(archivo,false);
-
-                    String cadena = $funlist.cabecera;
-                    String[] array = cadena.split("\n");
                     escribir.write("<style> .palres{font-weight: bold;} .ident{color: blue;} .cte{color: green} </style>");
+                    escribir.write("<h1>Programa: XXXX</h1>\n");
                     escribir.write("<h2>Funciones</h2>\n");
                     escribir.write("<ul>\n");
-                    for (int i = 0; i < array.length; i++)
-                        escribir.write("    <li>" + array[i] + "</li>\n");
+                    for (int i = 0; i < listFunc.length; i++){
+                        String nombre = listFuncName[i];
+                        String enlace = "<a href=\"" + nombre + "\">" + listFunc[i] + "</a>";
+                        escribir.write("    <li>" + enlace + "</li>\n");
+                    }
                     escribir.write("</ul>\n");
                     escribir.write("<hr/>\n");
                     escribir.write($funlist.vc);
@@ -64,84 +70,104 @@ vardefP: '=' simpvalue
     | ;
 
 // Tipo de una variable
-tbas returns [String v, String vc]
+tbas returns [String vc, String value]
     : 'integer' {
-        $v = "integer ";
-        $vc = "<SPAN CLASS=\"palres\"> integer </SPAN>\n";
+        $value = "integer ";
+        $vc = "<SPAN CLASS=\"palres\"> integer </SPAN>";
     }
     | 'float' {
-        $v = "float ";
-        $vc = "<SPAN CLASS=\"palres\"> float </SPAN>\n";
+        $value = "float ";
+        $vc = "<SPAN CLASS=\"palres\"> float </SPAN>";
     }
     | 'string' {
-        $v = "string ";
-        $vc = "<SPAN CLASS=\"palres\"> string </SPAN>\n";
+        $value = "string ";
+        $vc = "<SPAN CLASS=\"palres\"> string </SPAN>";
     };
 
-tvoid returns [String v, String vc]
+tvoid returns [String vc, String value]
     : 'void' {
-        $v = "void ";
-        $vc = "<SPAN CLASS=\"palres\"> void </SPAN>\n";
+        $value = "void ";
+        $vc = "<SPAN CLASS=\"palres\"> void </SPAN>";
     };
 
 // ---------------------------------------------------------------------------------------------------------------------
 // 2. DECLARACIÓN DE FUNCIONES
 // ---------------------------------------------------------------------------------------------------------------------
 
-funlist[String list, String listFunc] returns [String cabecera, String vc]:
-     funcdef {$list = $list + $funcdef.h + "\n"; $listFunc = $listFunc + $funcdef.vc;} f1 = funlist[$list, $listFunc] {$cabecera = $f1.cabecera; $vc = $f1.vc;}
-     | {$cabecera = $list; $vc = $listFunc;};
+funlist[String listCab, String listFunc, String listFuncName] returns [String cabecera, String vc, String funcName]:
+     funcdef {
+        $listCab = $listCab + $funcdef.cabecera + "\n";
+        $listFunc = $listFunc + $funcdef.vc;
+        $listFuncName = $listFuncName + $funcdef.funcName + "\n";
+     } f1 = funlist[$listCab, $listFunc, $listFuncName] {
+        $cabecera = $f1.cabecera;
+        $vc = $f1.vc;
+        $funcName = $f1.funcName;
+     }
+     | {
+        $cabecera = $listCab;
+        $vc = $listFunc;
+        $funcName = $listFuncName;
+    };
 
 // Estructura de la función
-funcdef returns [String h, String vc]
+funcdef returns [String cabecera, String vc, String funcName]
     : funchead '{' code '}'{
-        $h = $funchead.v;
+        $cabecera = $funchead.valueCab;
 
-        $vc = $funchead.vc + "<span>{</span>" + "<span>}</span>" + "<BR/>";
+        $funcName = $funchead.funcName;
+
+        $vc = $funchead.vc + "<span>{</span>" + "<BR/>" + "<BR/>" +"<span>}</span>" + "<BR/>";
     };
 
 // Estructura de la cabecera de la función
-funchead returns [String v, String vc]
+funchead returns [String vc, String valueCab, String funcName]
     : tbas IDENTIFIER '(' typedef1 ')' {
-        $v = $tbas.v + $IDENTIFIER.text + " <span>(</span>" + $typedef1.v + "<span>)</span>";
+        $valueCab = $tbas.value + $IDENTIFIER.text + "(" + $typedef1.value + ")";
 
-        String identifier = "<SPAN CLASS=\"ident\">" + $IDENTIFIER.text +"</SPAN\n";
+        $funcName = $IDENTIFIER.text;
+
+        String identifier = "<SPAN CLASS=\"ident\">" + $IDENTIFIER.text +"</SPAN";
         $vc = $tbas.vc + identifier + " <span>(</span>" + $typedef1.vc + " <span>)</span>";
     }
     | tvoid IDENTIFIER '(' typedef1 ')' {
-        $v = $tvoid.v + $IDENTIFIER.text + "<span>(</span>" + $typedef1.v + "<span>)</span>";
+        $valueCab = $tvoid.value + $IDENTIFIER.text + "(" + $typedef1.value + ")";
 
-        String identifier = "<SPAN CLASS=\"ident\">" + $IDENTIFIER.text +"</SPAN\n";
+        $funcName = $IDENTIFIER.text;
+
+        String identifier = "<SPAN CLASS=\"ident\">" + $IDENTIFIER.text +"</SPAN";
         $vc = $tvoid.vc + identifier + " <span>(</span>" + $typedef1.vc + " <span>)</span>";
     };
 
 // Parámetros de la función
-typedef1 returns [String v, String vc]
+typedef1 returns [String vc, String value]
     : typedef2 {
-        $v = $typedef2.v;
+        $value = $typedef2.value;
         $vc = $typedef2.vc;
     }
     | {
-        $v = "";
+        $value = "";
         $vc = "";
     };
 
-typedef2 returns [String v, String vc]
+typedef2 returns [String vc, String value]
     : tbas IDENTIFIER typedef2P {
-        $v = $tbas.v + $IDENTIFIER.text + $typedef2P.v;
+        $value = $tbas.value + $IDENTIFIER.text + $typedef2P.value;
 
-        String identifier = "<SPAN CLASS=\"ident\">" + $IDENTIFIER.text +"</SPAN\n";
+        String identifier = "<SPAN CLASS=\"ident\">" + $IDENTIFIER.text +"</SPAN";
         $vc = $tbas.vc + identifier + $typedef2P.vc;
     };
 
-typedef2P returns [String v, String vc]
+typedef2P returns [String vc, String value]
     : ',' tbas IDENTIFIER t1 = typedef2P {
-        $v = ',' + $tbas.v + $IDENTIFIER.text + $typedef2P.v;
-        String identifier = "<SPAN CLASS=\"ident\">" + $IDENTIFIER.text +"</SPAN\n";
-        $vc = $tbas.vc + identifier + $t1.vc;
+        $value = "," + $tbas.value + $IDENTIFIER.text + $typedef2P.text;
+
+        String identifier = "<SPAN CLASS=\"ident\">" + $IDENTIFIER.text +"</SPAN";
+        String coma = "<span>,</span>";
+        $vc = coma + $tbas.vc + identifier + $t1.vc;
     }
     | {
-        $v = "";
+        $value = "";
         $vc = "";
     };
 
