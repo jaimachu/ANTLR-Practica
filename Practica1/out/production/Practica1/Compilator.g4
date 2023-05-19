@@ -50,8 +50,18 @@ program :
                     escribir.write("</ul>\n");
                     escribir.write("<hr/>\n");
                     escribir.write($funlist.vc);
+
+                    //PROGRAMA PRINCIPAL
                     escribir.write("\n<h2>Programa Principal</h2>\n<br>\n");
+
+                    //Variables
                     escribir.write($dcllist.value);
+
+                    //Main()
+
+                    escribir.write("\n"+$sentlist.value);
+
+
                     escribir.close();
                 }catch (Exception e){
                     System.out.println("Error al escribir");
@@ -73,8 +83,8 @@ dcl returns [String value]:
 
 ctedef returns [String value]:
     '#define' CONST_DEF_IDENTIFIER simpvalue {
-    String v = "<span style=\"font-weight: bold;\">#define</span> <a href= \" #\">"+$CONST_DEF_IDENTIFIER.text+"</a>";
-    $value = v+$simpvalue.vc+"\n<br>\n";} ;
+    String v = "<span style=\"font-weight: bold;\">#define</span> <span CLASS=\"ident\">"+ $CONST_DEF_IDENTIFIER.text +"</span>";
+    $value = v+" "+$simpvalue.vc+"\n<br>\n";} ;
 
 // Valor de la constante o variable
 simpvalue returns[String vc]
@@ -210,7 +220,7 @@ sentlist returns[String value]
 
 // Cabecera del programa principal
 mainhead returns[String value]
-    : tvoid 'Main' '(' typedef1 ')' {$value = $tvoid.value + "Main" + "(" + $typedef1.value + ")";};
+    : tvoid 'Main' '(' typedef1 ')' {$value = $tvoid.value + "<span class = \"ident\">Main</span>" + "(" + $typedef1.value + ")";};
 
 // Código con sus respectivas sentencias
 code[String valueH] returns[String value]
@@ -247,14 +257,17 @@ op returns [String value]
 
 // Factor que puede ser un valor, una expresión entre paréntesis o una llamada a una función
 factor returns [String value]
+
     : simpvalue {$value = $simpvalue.vc;}
+    | IDENTIFIER { $value = "<span class =\"ident\">"+$IDENTIFIER.text+"</span>";}
     | '(' exp ')' {$value = "(" + $exp.value + ")";}
     |  funccall {$value = $funccall.value;};
 
+
 // Estructura de una llamada a una función en las sentencias del código
 funccall returns [String value]
-    : IDENTIFIER subpparamlist {$value = "<SPAN CLASS=\"ident\">" + $IDENTIFIER.text +"</SPAN>" + $subpparamlist.value;}
-    | CONST_DEF_IDENTIFIER {$value = $CONST_DEF_IDENTIFIER.text;};
+    : IDENTIFIER subpparamlist {$value = "<a href=\"#"+ $IDENTIFIER.text +"\">" + $IDENTIFIER.text +"</a>" + $subpparamlist.value;}
+    | CONST_DEF_IDENTIFIER subpparamlist{$value = $CONST_DEF_IDENTIFIER.text;};
 
 // Lista de parámetros
 subpparamlist returns [String value]:

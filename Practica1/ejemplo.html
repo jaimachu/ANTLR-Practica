@@ -25,11 +25,11 @@
 </div>
 
 <div style="text-indent: 2cm">
-	<SPAN CLASS="ident">cadena2</SPAN>=(<SPAN CLASS="ident">cadena</SPAN>+<SPAN CLASS="ident">desplazamiento</SPAN>)*<SPAN CLASS="ident">random</SPAN>(<SPAN CLASS="ident">desplazamiento</SPAN>);
+	<SPAN CLASS="ident">cadena2</SPAN>=(<span class ="ident">cadena</span>+<span class ="ident">desplazamiento</span>)*<a href="#random">random</a>(<span class ="ident">desplazamiento</span>);
 </div>
 
 <div style="text-indent: 2cm">
-	<SPAN CLASS="palres">return</SPAN>(<SPAN CLASS="ident">cadena2</SPAN>);
+	<SPAN CLASS="palres">return</SPAN>(<span class ="ident">cadena2</span>);
 </div>
 <span>}</span>
 <br>
@@ -38,11 +38,11 @@
 <hr><a NAME="save"></a>
 <SPAN CLASS="palres"> void </SPAN><SPAN CLASS="ident">save</SPAN> <span>(</span><SPAN CLASS="palres"> string </SPAN><SPAN CLASS="ident">nombre</SPAN> <span>)</span><span>{</span>
 <div style="text-indent: 2cm">
-	<SPAN CLASS="ident">fopen</SPAN>(<SPAN CLASS="cte">file.txt</SPAN>,<SPAN CLASS="cte">w</SPAN>);
+	<a href="#fopen">fopen</a>(<SPAN CLASS="cte">file.txt</SPAN>,<SPAN CLASS="cte">w</SPAN>);
 </div>
 
 <div style="text-indent: 2cm">
-	<SPAN CLASS="ident">printf</SPAN>(<SPAN CLASS="ident">nombre</SPAN>);
+	<a href="#printf">printf</a>(<span class ="ident">nombre</span>);
 </div>
 <span>}</span>
 <br>
@@ -51,10 +51,10 @@
 <hr>
 <h2>Programa Principal</h2>
 <br>
-<span style="font-weight: bold;">#define</span> <a href= " #">FECHA</a><SPAN CLASS="cte">2023</SPAN>
+<span style="font-weight: bold;">#define</span> <span CLASS="ident">FECHA</span> <SPAN CLASS="cte">2023</SPAN>
 <br>
 
-<span style="font-weight: bold;">#define</span> <a href= " #">CODIGO</a><SPAN CLASS="cte">10</SPAN>
+<span style="font-weight: bold;">#define</span> <span CLASS="ident">CODIGO</span> <SPAN CLASS="cte">10</SPAN>
 <br>
 
 <SPAN CLASS="palres"> integer </SPAN><SPAN CLASS="ident">n_alumnos</SPAN>;
@@ -63,3 +63,25 @@
 <br>
 <SPAN CLASS="palres"> string </SPAN><SPAN CLASS="ident">nombre</SPAN>=<SPAN CLASS="cte">alumno1</SPAN>;
 <br>
+
+void <span class = "ident">Main</span>(){
+<div style="text-indent: 2cm">
+	<SPAN CLASS="palres"> string </SPAN><SPAN CLASS="ident">codificado</SPAN>;
+</div>
+
+<div style="text-indent: 2cm">
+	<SPAN CLASS="ident">codificado</SPAN>=<a href="#codificar_cadena">codificar_cadena</a>(<span class ="ident">nombre</span>,FECHA);
+</div>
+
+<div style="text-indent: 2cm">
+	<a href="#save">save</a>(<span class ="ident">codificado</span>);
+</div>
+
+<div style="text-indent: 2cm">
+	<SPAN CLASS="ident">n_alumnos</SPAN>=<span class ="ident">n_alumnos</span>+<SPAN CLASS="cte">1</SPAN>;
+</div>
+
+<div style="text-indent: 2cm">
+	<SPAN CLASS="ident">codificado</SPAN>=<a href="#codificar_cadena">codificar_cadena</a>(<span class ="ident">nombre</span>,(CODIGODIV<span class ="ident">codificado</span>));
+</div>
+}
