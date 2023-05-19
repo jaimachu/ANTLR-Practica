@@ -9,7 +9,7 @@ grammar Compilator;
 
 // Axioma
 program :
-            dcllist
+            dcllist[""]
             funlist["", "", ""]
             sentlist {
                 try{
@@ -21,17 +21,21 @@ program :
                     File archivo = new File("ejemplo.html");
                     FileWriter escribir=new FileWriter(archivo,false);
                     escribir.write("<style> .palres{font-weight: bold;} .ident{color: blue;} .cte{color: green} </style>");
+                    escribir.write("<HR/>");
+                    escribir.write("<a name=\"main\">");
                     escribir.write("<h1>Programa: XXXX</h1>\n");
                     escribir.write("<h2>Funciones</h2>\n");
                     escribir.write("<ul>\n");
                     for (int i = 0; i < listFunc.length; i++){
                         String nombre = listFuncName[i];
-                        String enlace = "<a href=\"" + nombre + "\">" + listFunc[i] + "</a>";
+                        String enlace = "<a href=\"#" + nombre + "\">" + listFunc[i] + "</a>";
                         escribir.write("    <li>" + enlace + "</li>\n");
                     }
                     escribir.write("</ul>\n");
                     escribir.write("<hr/>\n");
                     escribir.write($funlist.vc);
+                    escribir.write("<h2>Programa Principal</h2><br>\n");
+                    escribir.write($dcllist.value);
                     escribir.close();
                 }catch (Exception e){
                     System.out.println("Error al escribir");
@@ -42,14 +46,19 @@ program :
 // 1. DECLARACIÓN DE VARIABLES Y CONSTANTES
 // ---------------------------------------------------------------------------------------------------------------------
 
-dcllist :dcl dcllist
-    | ;
+dcllist [String valueH]returns [String value] :
+    dcl {$valueH = $valueH + $dcl.value;} d1=dcllist[$valueH] {$value = $d1.value;}
+    |  {$value = $valueH;};
 
-// Declaración de una variable o constante
-dcl : ctedef
-    | vardef ';' ;
+// DeclaraciÃ³n de una variable o constante
+dcl returns [String value]:
+    ctedef{$value = $ctedef.value+"\n";}
+    | vardef ';'{$value = $vardef.value + ";\n" + "<br/>";} ;
 
-ctedef: '#define' CONST_DEF_IDENTIFIER simpvalue ;
+ctedef returns [String value]:
+    '#define' CONST_DEF_IDENTIFIER simpvalue {
+    String v = "<span style=\"font-weight: bold;\">#define</span> <a href= \" #\">"+$CONST_DEF_IDENTIFIER.text+"</a>";
+    $value = v+$simpvalue.vc+"<br/>";} ;
 
 // Valor de la constante o variable
 simpvalue returns[String vc]
@@ -66,7 +75,7 @@ varlistP :
 
 
 vardef returns [String value]
-    : tbas IDENTIFIER vardefP {$value = $tbas.value + $IDENTIFIER.text + $vardefP.value;};
+    : tbas IDENTIFIER vardefP {$value = $tbas.vc + "<SPAN CLASS=\"ident\">" + $IDENTIFIER.text +"</SPAN>" + $vardefP.value;};
 vardefP returns [String value]
     : '=' simpvalue {$value = "=" + $simpvalue.vc;}
     | {$value = "";};
@@ -119,10 +128,10 @@ funcdef returns [String cabecera, String vc, String funcName]
 
         $funcName = $funchead.funcName;
 
-        String codigo = "<DIV style=\"text-indent: 10cm\">" + $code.value + "</DIV>";
-
-        System.out.println(codigo);
-        $vc = $funchead.vc + "<span>{</span>" + codigo +"<span>}</span>" + "<BR/>";
+        String codigo = $code.value;
+        String iniFunc = "<a href=" + "\"#" + $funcName + "\"" + "><span>Inicio de la función</span></a>";
+        String iniProg = "<a href=\"#main\"><span> Inicio del programa</span></a>";
+        $vc = "<A NAME=" + "\"" + $funcName + "\"" + ">" + $funchead.vc + "<span>{</span>" + codigo +"<span>}</span>" + "<BR/>" + iniFunc + iniProg + "<HR/>";
     };
 
 // Estructura de la cabecera de la función
@@ -132,7 +141,7 @@ funchead returns [String vc, String valueCab, String funcName]
 
         $funcName = $IDENTIFIER.text;
 
-        String identifier = "<SPAN CLASS=\"ident\">" + $IDENTIFIER.text +"</SPAN";
+        String identifier = "<SPAN CLASS=\"ident\">" + $IDENTIFIER.text +"</SPAN>";
         $vc = $tbas.vc + identifier + " <span>(</span>" + $typedef1.vc + " <span>)</span>";
     }
     | tvoid IDENTIFIER '(' typedef1 ')' {
@@ -140,7 +149,7 @@ funchead returns [String vc, String valueCab, String funcName]
 
         $funcName = $IDENTIFIER.text;
 
-        String identifier = "<SPAN CLASS=\"ident\">" + $IDENTIFIER.text +"</SPAN";
+        String identifier = "<SPAN CLASS=\"ident\">" + $IDENTIFIER.text +"</SPAN>";
         $vc = $tvoid.vc + identifier + " <span>(</span>" + $typedef1.vc + " <span>)</span>";
     };
 
@@ -159,7 +168,7 @@ typedef2 returns [String vc, String value]
     : tbas IDENTIFIER typedef2P {
         $value = $tbas.value + $IDENTIFIER.text + $typedef2P.value;
 
-        String identifier = "<SPAN CLASS=\"ident\">" + $IDENTIFIER.text +"</SPAN";
+        String identifier = "<SPAN CLASS=\"ident\">" + $IDENTIFIER.text +"</SPAN>";
         $vc = $tbas.vc + identifier + $typedef2P.vc;
     };
 
@@ -167,7 +176,7 @@ typedef2P returns [String vc, String value]
     : ',' tbas IDENTIFIER t1 = typedef2P {
         $value = "," + $tbas.value + $IDENTIFIER.text + $typedef2P.text;
 
-        String identifier = "<SPAN CLASS=\"ident\">" + $IDENTIFIER.text +"</SPAN";
+        String identifier = "<SPAN CLASS=\"ident\">" + $IDENTIFIER.text +"</SPAN>";
         String coma = "<span>,</span>";
         $vc = coma + $tbas.vc + identifier + $t1.vc;
     }
@@ -181,7 +190,7 @@ typedef2P returns [String vc, String value]
 // 3. DECLARACIÓN DEL CUERPO DEL PROGRAMA
 // ---------------------------------------------------------------------------------------------------------------------
 sentlist returns[String value]
-    :  mainhead '{' code["kjhkh"] '}' {$value = $mainhead.value + "{" + $code.value + "}";};
+    :  mainhead '{' code[""] '}' {$value = $mainhead.value + "{" + $code.value + "}";};
 
 // Cabecera del programa principal
 mainhead returns[String value]
@@ -189,21 +198,21 @@ mainhead returns[String value]
 
 // Código con sus respectivas sentencias
 code[String valueH] returns[String value]
-    : sent {$valueH = $valueH + $sent.value;} c1 = code[valueH] {$value = $c1.value;}
+    : sent {$valueH = $valueH + $sent.value;} c1 = code[$valueH] {$value = $c1.value;}
 	| {$value = $valueH;};
 
 sent returns[String value]
-    : asig ';' {$value = $asig.value + ";";}
-    | funccall ';' {$value = $funccall.value + ";";}
-    | vardef ';' {$value = $vardef.value + ";";}
-    | returnn ';' {$value = $returnn.value + ";";};
+    : asig ';' {$value = "<DIV style=\"text-indent: 2cm\">" + $asig.value + ";" + "</DIV>" + "\n";}
+    | funccall ';' {$value = "<DIV style=\"text-indent: 2cm\">" + $funccall.value + ";" + "</DIV>" + "\n";}
+    | vardef ';' {$value = "<DIV style=\"text-indent: 2cm\">" + $vardef.value + ";" + "</DIV>" + "\n";}
+    | returnn ';' {$value = "<DIV style=\"text-indent: 2cm\">" + $returnn.value + ";" + "</DIV>" + "\n";};
 
 returnn returns[String value]
-    : 'return' exp {$value = "return" + $exp.value;};
+    : 'return' exp {$value = "<SPAN CLASS=\"palres\">" + "return" + "</SPAN>" + $exp.value;};
 
 // Estructura de una asignación
 asig returns[String value]
-    : IDENTIFIER '=' exp {$value = $IDENTIFIER.text + "=" + $exp.value;};
+    : IDENTIFIER '=' exp {$value = "<SPAN CLASS=\"ident\">" + $IDENTIFIER.text +"</SPAN>" + "=" + $exp.value;};
 
 // Estructura de una operación entre dos factores
 exp returns[String value]
@@ -228,7 +237,7 @@ factor returns [String value]
 
 // Estructura de una llamada a una función en las sentencias del código
 funccall returns [String value]
-    : IDENTIFIER subpparamlist {$value = $IDENTIFIER.text + $subpparamlist.value;}
+    : IDENTIFIER subpparamlist {$value = "<SPAN CLASS=\"ident\">" + $IDENTIFIER.text +"</SPAN>" + $subpparamlist.value;}
     | CONST_DEF_IDENTIFIER {$value = $CONST_DEF_IDENTIFIER.text;};
 
 // Lista de parámetros
