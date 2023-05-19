@@ -20,10 +20,26 @@ program :
 
                     File archivo = new File("ejemplo.html");
                     FileWriter escribir=new FileWriter(archivo,false);
-                    escribir.write("<style> .palres{font-weight: bold;} .ident{color: blue;} .cte{color: green} </style>");
-                    escribir.write("<HR/>");
-                    escribir.write("<a name=\"main\">");
+
+                    //CSS DE LA PAGINA
+                    escribir.write("<style> \n" +
+                    "    .palres{\n" +
+                    "        font-weight: bold;\n" +
+                    "    } \n" +
+                    "    .ident{\n" +
+                    "        color: blue;\n" +
+                    "    } \n" +
+                    "    .cte{\n" +
+                    "        color: green\n" +
+                    "    } \n" +
+                    "</style>\n");
+                    escribir.write("<hr/>\n");
+                    escribir.write("<a name=\"main\"></a>\n");
+
+                    //PROGRAMA
                     escribir.write("<h1>Programa: XXXX</h1>\n");
+
+                    //Funciones
                     escribir.write("<h2>Funciones</h2>\n");
                     escribir.write("<ul>\n");
                     for (int i = 0; i < listFunc.length; i++){
@@ -34,7 +50,7 @@ program :
                     escribir.write("</ul>\n");
                     escribir.write("<hr/>\n");
                     escribir.write($funlist.vc);
-                    escribir.write("<h2>Programa Principal</h2><br>\n");
+                    escribir.write("\n<h2>Programa Principal</h2>\n<br>\n");
                     escribir.write($dcllist.value);
                     escribir.close();
                 }catch (Exception e){
@@ -53,12 +69,12 @@ dcllist [String valueH]returns [String value] :
 // DeclaraciÃ³n de una variable o constante
 dcl returns [String value]:
     ctedef{$value = $ctedef.value+"\n";}
-    | vardef ';'{$value = $vardef.value + ";\n" + "<br/>";} ;
+    | vardef ';'{$value = $vardef.value + ";\n" + "<br>\n";} ;
 
 ctedef returns [String value]:
     '#define' CONST_DEF_IDENTIFIER simpvalue {
     String v = "<span style=\"font-weight: bold;\">#define</span> <a href= \" #\">"+$CONST_DEF_IDENTIFIER.text+"</a>";
-    $value = v+$simpvalue.vc+"<br/>";} ;
+    $value = v+$simpvalue.vc+"\n<br>\n";} ;
 
 // Valor de la constante o variable
 simpvalue returns[String vc]
@@ -129,9 +145,9 @@ funcdef returns [String cabecera, String vc, String funcName]
         $funcName = $funchead.funcName;
 
         String codigo = $code.value;
-        String iniFunc = "<a href=" + "\"#" + $funcName + "\"" + "><span>Inicio de la función</span></a>";
-        String iniProg = "<a href=\"#main\"><span> Inicio del programa</span></a>";
-        $vc = "<A NAME=" + "\"" + $funcName + "\"" + ">" + $funchead.vc + "<span>{</span>" + codigo +"<span>}</span>" + "<BR/>" + iniFunc + iniProg + "<HR/>";
+        String iniFunc = "<a href=" + "\"#" + $funcName + "\"" + "><span>Inicio de la función</span></a>\n";
+        String iniProg = "<a href=\"#main\"><span> Inicio del programa</span></a>\n";
+        $vc = "<a NAME=" + "\"" + $funcName + "\"" + "></a>\n" + $funchead.vc + "<span>{</span>" + codigo +"<span>}</span>" + "\n<br>\n" + iniFunc + iniProg + "<hr>";
     };
 
 // Estructura de la cabecera de la función
@@ -202,10 +218,10 @@ code[String valueH] returns[String value]
 	| {$value = $valueH;};
 
 sent returns[String value]
-    : asig ';' {$value = "<DIV style=\"text-indent: 2cm\">" + $asig.value + ";" + "</DIV>" + "\n";}
-    | funccall ';' {$value = "<DIV style=\"text-indent: 2cm\">" + $funccall.value + ";" + "</DIV>" + "\n";}
-    | vardef ';' {$value = "<DIV style=\"text-indent: 2cm\">" + $vardef.value + ";" + "</DIV>" + "\n";}
-    | returnn ';' {$value = "<DIV style=\"text-indent: 2cm\">" + $returnn.value + ";" + "</DIV>" + "\n";};
+    : asig ';' {$value = "\n<div style=\"text-indent: 2cm\">\n\t" + $asig.value + ";" + "\n</div>" + "\n";}
+    | funccall ';' {$value = "\n<div style=\"text-indent: 2cm\">\n\t" + $funccall.value + ";" + "\n</div>" + "\n";}
+    | vardef ';' {$value = "\n<div style=\"text-indent: 2cm\">\n\t" + $vardef.value + ";" + "\n</div>" + "\n";}
+    | returnn ';' {$value = "\n<div style=\"text-indent: 2cm\">\n\t" + $returnn.value + ";" + "\n</div>" + "\n";};
 
 returnn returns[String value]
     : 'return' exp {$value = "<SPAN CLASS=\"palres\">" + "return" + "</SPAN>" + $exp.value;};

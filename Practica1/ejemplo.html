@@ -1,19 +1,65 @@
-<style> .palres{font-weight: bold;} .ident{color: blue;} .cte{color: green} </style><HR/><a name="main"><h1>Programa: XXXX</h1>
+<style> 
+    .palres{
+        font-weight: bold;
+    } 
+    .ident{
+        color: blue;
+    } 
+    .cte{
+        color: green
+    } 
+</style>
+<hr/>
+<a name="main"></a>
+<h1>Programa: XXXX</h1>
 <h2>Funciones</h2>
 <ul>
     <li><a href="#codificar_cadena">string codificar_cadena(string cadena,integer desplazamiento)</a></li>
     <li><a href="#save">void save(string nombre)</a></li>
 </ul>
 <hr/>
-<A NAME="codificar_cadena"><SPAN CLASS="palres"> string </SPAN><SPAN CLASS="ident">codificar_cadena</SPAN> <span>(</span><SPAN CLASS="palres"> string </SPAN><SPAN CLASS="ident">cadena</SPAN><span>,</span><SPAN CLASS="palres"> integer </SPAN><SPAN CLASS="ident">desplazamiento</SPAN> <span>)</span><span>{</span><DIV style="text-indent: 2cm"><SPAN CLASS="palres"> string </SPAN><SPAN CLASS="ident">cadena2</SPAN>;</DIV>
-<DIV style="text-indent: 2cm"><SPAN CLASS="ident">cadena2</SPAN>=(<SPAN CLASS="ident">cadena</SPAN>+<SPAN CLASS="ident">desplazamiento</SPAN>)*<SPAN CLASS="ident">random</SPAN>(<SPAN CLASS="ident">desplazamiento</SPAN>);</DIV>
-<DIV style="text-indent: 2cm"><SPAN CLASS="palres">return</SPAN>(<SPAN CLASS="ident">cadena2</SPAN>);</DIV>
-<span>}</span><BR/><a href="#codificar_cadena"><span>Inicio de la función</span></a><a href="#main"><span> Inicio del programa</span></a><HR/><A NAME="save"><SPAN CLASS="palres"> void </SPAN><SPAN CLASS="ident">save</SPAN> <span>(</span><SPAN CLASS="palres"> string </SPAN><SPAN CLASS="ident">nombre</SPAN> <span>)</span><span>{</span><DIV style="text-indent: 2cm"><SPAN CLASS="ident">fopen</SPAN>(<SPAN CLASS="cte">file.txt</SPAN>,<SPAN CLASS="cte">w</SPAN>);</DIV>
-<DIV style="text-indent: 2cm"><SPAN CLASS="ident">printf</SPAN>(<SPAN CLASS="ident">nombre</SPAN>);</DIV>
-<span>}</span><BR/><a href="#save"><span>Inicio de la función</span></a><a href="#main"><span> Inicio del programa</span></a><HR/><h2>Programa Principal</h2><br>
-<span style="font-weight: bold;">#define</span> <a href= " #">FECHA</a><SPAN CLASS="cte">2023</SPAN><br/>
-<span style="font-weight: bold;">#define</span> <a href= " #">CODIGO</a><SPAN CLASS="cte">10</SPAN><br/>
+<a NAME="codificar_cadena"></a>
+<SPAN CLASS="palres"> string </SPAN><SPAN CLASS="ident">codificar_cadena</SPAN> <span>(</span><SPAN CLASS="palres"> string </SPAN><SPAN CLASS="ident">cadena</SPAN><span>,</span><SPAN CLASS="palres"> integer </SPAN><SPAN CLASS="ident">desplazamiento</SPAN> <span>)</span><span>{</span>
+<div style="text-indent: 2cm">
+	<SPAN CLASS="palres"> string </SPAN><SPAN CLASS="ident">cadena2</SPAN>;
+</div>
+
+<div style="text-indent: 2cm">
+	<SPAN CLASS="ident">cadena2</SPAN>=(<SPAN CLASS="ident">cadena</SPAN>+<SPAN CLASS="ident">desplazamiento</SPAN>)*<SPAN CLASS="ident">random</SPAN>(<SPAN CLASS="ident">desplazamiento</SPAN>);
+</div>
+
+<div style="text-indent: 2cm">
+	<SPAN CLASS="palres">return</SPAN>(<SPAN CLASS="ident">cadena2</SPAN>);
+</div>
+<span>}</span>
+<br>
+<a href="#codificar_cadena"><span>Inicio de la función</span></a>
+<a href="#main"><span> Inicio del programa</span></a>
+<hr><a NAME="save"></a>
+<SPAN CLASS="palres"> void </SPAN><SPAN CLASS="ident">save</SPAN> <span>(</span><SPAN CLASS="palres"> string </SPAN><SPAN CLASS="ident">nombre</SPAN> <span>)</span><span>{</span>
+<div style="text-indent: 2cm">
+	<SPAN CLASS="ident">fopen</SPAN>(<SPAN CLASS="cte">file.txt</SPAN>,<SPAN CLASS="cte">w</SPAN>);
+</div>
+
+<div style="text-indent: 2cm">
+	<SPAN CLASS="ident">printf</SPAN>(<SPAN CLASS="ident">nombre</SPAN>);
+</div>
+<span>}</span>
+<br>
+<a href="#save"><span>Inicio de la función</span></a>
+<a href="#main"><span> Inicio del programa</span></a>
+<hr>
+<h2>Programa Principal</h2>
+<br>
+<span style="font-weight: bold;">#define</span> <a href= " #">FECHA</a><SPAN CLASS="cte">2023</SPAN>
+<br>
+
+<span style="font-weight: bold;">#define</span> <a href= " #">CODIGO</a><SPAN CLASS="cte">10</SPAN>
+<br>
+
 <SPAN CLASS="palres"> integer </SPAN><SPAN CLASS="ident">n_alumnos</SPAN>;
-<br/><SPAN CLASS="palres"> float </SPAN><SPAN CLASS="ident">__valor_real</SPAN>;
-<br/><SPAN CLASS="palres"> string </SPAN><SPAN CLASS="ident">nombre</SPAN>=<SPAN CLASS="cte">alumno1</SPAN>;
-<br/>
+<br>
+<SPAN CLASS="palres"> float </SPAN><SPAN CLASS="ident">__valor_real</SPAN>;
+<br>
+<SPAN CLASS="palres"> string </SPAN><SPAN CLASS="ident">nombre</SPAN>=<SPAN CLASS="cte">alumno1</SPAN>;
+<br>

@@ -1,4 +1,4 @@
-// Generated from Compilator.g4 by ANTLR 4.12.0
+// Generated from java-escape by ANTLR 4.11.1
 
     import java.io.File;
     import java.io.FileWriter;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast", "CheckReturnValue"})
 public class CompilatorParser extends Parser {
-	static { RuntimeMetaData.checkVersion("4.12.0", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.11.1", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
@@ -99,7 +99,7 @@ public class CompilatorParser extends Parser {
 	}
 
 	@Override
-	public String getGrammarFileName() { return "Compilator.g4"; }
+	public String getGrammarFileName() { return "java-escape"; }
 
 	@Override
 	public String[] getRuleNames() { return ruleNames; }
@@ -163,10 +163,26 @@ public class CompilatorParser extends Parser {
 
 			                    File archivo = new File("ejemplo.html");
 			                    FileWriter escribir=new FileWriter(archivo,false);
-			                    escribir.write("<style> .palres{font-weight: bold;} .ident{color: blue;} .cte{color: green} </style>");
-			                    escribir.write("<HR/>");
-			                    escribir.write("<a name=\"main\">");
+
+			                    //CSS DE LA PAGINA
+			                    escribir.write("<style> \n" +
+			                    "    .palres{\n" +
+			                    "        font-weight: bold;\n" +
+			                    "    } \n" +
+			                    "    .ident{\n" +
+			                    "        color: blue;\n" +
+			                    "    } \n" +
+			                    "    .cte{\n" +
+			                    "        color: green\n" +
+			                    "    } \n" +
+			                    "</style>\n");
+			                    escribir.write("<hr/>\n");
+			                    escribir.write("<a name=\"main\"></a>\n");
+
+			                    //PROGRAMA
 			                    escribir.write("<h1>Programa: XXXX</h1>\n");
+
+			                    //Funciones
 			                    escribir.write("<h2>Funciones</h2>\n");
 			                    escribir.write("<ul>\n");
 			                    for (int i = 0; i < listFunc.length; i++){
@@ -177,7 +193,7 @@ public class CompilatorParser extends Parser {
 			                    escribir.write("</ul>\n");
 			                    escribir.write("<hr/>\n");
 			                    escribir.write(((ProgramContext)_localctx).funlist.vc);
-			                    escribir.write("<h2>Programa Principal</h2><br>\n");
+			                    escribir.write("\n<h2>Programa Principal</h2>\n<br>\n");
 			                    escribir.write(((ProgramContext)_localctx).dcllist.value);
 			                    escribir.close();
 			                }catch (Exception e){
@@ -311,7 +327,7 @@ public class CompilatorParser extends Parser {
 				((DclContext)_localctx).vardef = vardef();
 				setState(79);
 				match(T__0);
-				((DclContext)_localctx).value =  ((DclContext)_localctx).vardef.value + ";\n" + "<br/>";
+				((DclContext)_localctx).value =  ((DclContext)_localctx).vardef.value + ";\n" + "<br>\n";
 				}
 				break;
 			default:
@@ -366,7 +382,7 @@ public class CompilatorParser extends Parser {
 			((CtedefContext)_localctx).simpvalue = simpvalue();
 
 			    String v = "<span style=\"font-weight: bold;\">#define</span> <a href= \" #\">"+(((CtedefContext)_localctx).CONST_DEF_IDENTIFIER!=null?((CtedefContext)_localctx).CONST_DEF_IDENTIFIER.getText():null)+"</a>";
-			    ((CtedefContext)_localctx).value =  v+((CtedefContext)_localctx).simpvalue.vc+"<br/>";
+			    ((CtedefContext)_localctx).value =  v+((CtedefContext)_localctx).simpvalue.vc+"\n<br>\n";
 			}
 		}
 		catch (RecognitionException re) {
@@ -916,9 +932,9 @@ public class CompilatorParser extends Parser {
 			        ((FuncdefContext)_localctx).funcName =  ((FuncdefContext)_localctx).funchead.funcName;
 
 			        String codigo = ((FuncdefContext)_localctx).code.value;
-			        String iniFunc = "<a href=" + "\"#" + _localctx.funcName + "\"" + "><span>Inicio de la función</span></a>";
-			        String iniProg = "<a href=\"#main\"><span> Inicio del programa</span></a>";
-			        ((FuncdefContext)_localctx).vc =  "<A NAME=" + "\"" + _localctx.funcName + "\"" + ">" + ((FuncdefContext)_localctx).funchead.vc + "<span>{</span>" + codigo +"<span>}</span>" + "<BR/>" + iniFunc + iniProg + "<HR/>";
+			        String iniFunc = "<a href=" + "\"#" + _localctx.funcName + "\"" + "><span>Inicio de la función</span></a>\n";
+			        String iniProg = "<a href=\"#main\"><span> Inicio del programa</span></a>\n";
+			        ((FuncdefContext)_localctx).vc =  "<a NAME=" + "\"" + _localctx.funcName + "\"" + "></a>\n" + ((FuncdefContext)_localctx).funchead.vc + "<span>{</span>" + codigo +"<span>}</span>" + "\n<br>\n" + iniFunc + iniProg + "<hr>";
 			    
 			}
 		}
@@ -1468,7 +1484,7 @@ public class CompilatorParser extends Parser {
 				((SentContext)_localctx).asig = asig();
 				setState(203);
 				match(T__0);
-				((SentContext)_localctx).value =  "<DIV style=\"text-indent: 2cm\">" + ((SentContext)_localctx).asig.value + ";" + "</DIV>" + "\n";
+				((SentContext)_localctx).value =  "\n<div style=\"text-indent: 2cm\">\n\t" + ((SentContext)_localctx).asig.value + ";" + "\n</div>" + "\n";
 				}
 				break;
 			case 2:
@@ -1478,7 +1494,7 @@ public class CompilatorParser extends Parser {
 				((SentContext)_localctx).funccall = funccall();
 				setState(207);
 				match(T__0);
-				((SentContext)_localctx).value =  "<DIV style=\"text-indent: 2cm\">" + ((SentContext)_localctx).funccall.value + ";" + "</DIV>" + "\n";
+				((SentContext)_localctx).value =  "\n<div style=\"text-indent: 2cm\">\n\t" + ((SentContext)_localctx).funccall.value + ";" + "\n</div>" + "\n";
 				}
 				break;
 			case 3:
@@ -1488,7 +1504,7 @@ public class CompilatorParser extends Parser {
 				((SentContext)_localctx).vardef = vardef();
 				setState(211);
 				match(T__0);
-				((SentContext)_localctx).value =  "<DIV style=\"text-indent: 2cm\">" + ((SentContext)_localctx).vardef.value + ";" + "</DIV>" + "\n";
+				((SentContext)_localctx).value =  "\n<div style=\"text-indent: 2cm\">\n\t" + ((SentContext)_localctx).vardef.value + ";" + "\n</div>" + "\n";
 				}
 				break;
 			case 4:
@@ -1498,7 +1514,7 @@ public class CompilatorParser extends Parser {
 				((SentContext)_localctx).returnn = returnn();
 				setState(215);
 				match(T__0);
-				((SentContext)_localctx).value =  "<DIV style=\"text-indent: 2cm\">" + ((SentContext)_localctx).returnn.value + ";" + "</DIV>" + "\n";
+				((SentContext)_localctx).value =  "\n<div style=\"text-indent: 2cm\">\n\t" + ((SentContext)_localctx).returnn.value + ";" + "\n</div>" + "\n";
 				}
 				break;
 			}
