@@ -221,15 +221,15 @@ public interface CompilatorListener extends ParseTreeListener {
 	 */
 	void exitSent(CompilatorParser.SentContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link CompilatorParser#return}.
+	 * Enter a parse tree produced by {@link CompilatorParser#returnn}.
 	 * @param ctx the parse tree
 	 */
-	void enterReturn(CompilatorParser.ReturnContext ctx);
+	void enterReturnn(CompilatorParser.ReturnnContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link CompilatorParser#return}.
+	 * Exit a parse tree produced by {@link CompilatorParser#returnn}.
 	 * @param ctx the parse tree
 	 */
-	void exitReturn(CompilatorParser.ReturnContext ctx);
+	void exitReturnn(CompilatorParser.ReturnnContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link CompilatorParser#asig}.
 	 * @param ctx the parse tree

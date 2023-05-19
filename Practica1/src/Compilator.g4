@@ -65,9 +65,11 @@ varlistP :
 
 
 
-vardef :tbas IDENTIFIER vardefP;
-vardefP: '=' simpvalue
-    | ;
+vardef returns [String value]
+    : tbas IDENTIFIER vardefP {$value = $tbas.value + $IDENTIFIER.text + $vardefP.value;};
+vardefP returns [String value]
+    : '=' simpvalue {$value = "=" + $simpvalue.vc;}
+    | {$value = "";};
 
 // Tipo de una variable
 tbas returns [String vc, String value]
@@ -112,12 +114,15 @@ funlist[String listCab, String listFunc, String listFuncName] returns [String ca
 
 // Estructura de la función
 funcdef returns [String cabecera, String vc, String funcName]
-    : funchead '{' code '}'{
+    : funchead '{' code[""] '}'{
         $cabecera = $funchead.valueCab;
 
         $funcName = $funchead.funcName;
 
-        $vc = $funchead.vc + "<span>{</span>" + "<BR/>" + "<BR/>" +"<span>}</span>" + "<BR/>";
+        String codigo = "<DIV style=\"text-indent: 10cm\">" + $code.value + "</DIV>";
+
+        System.out.println(codigo);
+        $vc = $funchead.vc + "<span>{</span>" + codigo +"<span>}</span>" + "<BR/>";
     };
 
 // Estructura de la cabecera de la función
@@ -175,56 +180,70 @@ typedef2P returns [String vc, String value]
 // ---------------------------------------------------------------------------------------------------------------------
 // 3. DECLARACIÓN DEL CUERPO DEL PROGRAMA
 // ---------------------------------------------------------------------------------------------------------------------
-sentlist:  mainhead '{' code '}';
+sentlist returns[String value]
+    :  mainhead '{' code[""] '}' {$value = $mainhead.value + "{" + $code.value + "}";};
 
 // Cabecera del programa principal
-mainhead : tvoid 'Main' '(' typedef1 ')';
+mainhead returns[String value]
+    : tvoid 'Main' '(' typedef1 ')' {$value = $tvoid.value + "Main" + "(" + $typedef1.value + ")";};
 
 // Código con sus respectivas sentencias
-code : sent code
-		| ;
+code[String valueH] returns[String value]
+    : sent {$valueH = $valueH + $sent.value;} c1 = code[valueH] {$value = $c1.value;}
+	| {$value = $valueH;};
 
-sent : asig ';'
-    | funccall ';'
-    | vardef ';'
-    | return ';' ;
+sent returns[String value]
+    : asig ';' {$value = $asig.value + ";";}
+    | funccall ';' {$value = $funccall.value + ";";}
+    | vardef ';' {$value = $vardef.value + ";";}
+    | returnn ';' {$value = $returnn.value + ";";};
 
-return : 'return' exp;
+returnn returns[String value]
+    : 'return' exp {$value = "return" + $exp.value;};
 
 // Estructura de una asignación
-asig : IDENTIFIER '=' exp;
+asig returns[String value]
+    : IDENTIFIER '=' exp {$value = $IDENTIFIER.text + "=" + $exp.value;};
 
 // Estructura de una operación entre dos factores
-exp : factor expP;
+exp returns[String value]
+    : factor expP[""] {$value = $factor.value + $expP.value;};
 
-expP : op factor expP
-    | ;
+expP[String valueH] returns [String value]
+    : op factor {$valueH = $valueH + $op.value + $factor.value;} e1 = expP[$valueH]{$value = $e1.value;}
+    | {$value = $valueH;};
 
-op : '+'
-    | '-'
-    | '*'
-    | 'DIV'
-    | 'MOD' ;
+op returns [String value]
+    : '+' {$value = "+";}
+    | '-' {$value = "-";}
+    | '*' {$value = "*";}
+    | 'DIV' {$value = "DIV";}
+    | 'MOD' {$value = "MOD";};
 
 // Factor que puede ser un valor, una expresión entre paréntesis o una llamada a una función
-factor : simpvalue
-    | '(' exp ')'
-    |  funccall ;
+factor returns [String value]
+    : simpvalue {$value = $simpvalue.vc;}
+    | '(' exp ')' {$value = "(" + $exp.value + ")";}
+    |  funccall {$value = $funccall.value;};
 
 // Estructura de una llamada a una función en las sentencias del código
-funccall : IDENTIFIER subpparamlist | CONST_DEF_IDENTIFIER ;
+funccall returns [String value]
+    : IDENTIFIER subpparamlist {$value = $IDENTIFIER.text + $subpparamlist.value;}
+    | CONST_DEF_IDENTIFIER {$value = $CONST_DEF_IDENTIFIER.text;};
 
 // Lista de parámetros
-subpparamlist :
-    '(' explist ')'
-    | ;
+subpparamlist returns [String value]:
+    '(' explist ')' {$value = "(" + $explist.value + ")";}
+    | {$value = "";};
 
 // Lista de expresiones
-explist : exp explistP;
+explist returns [String value]
+    : exp explistP[""] {$value = $exp.value + $explistP.value;};
 
 
-explistP : ',' exp explistP
-    | ;
+explistP[String valueH] returns [String value]
+    : ',' exp {$valueH = $valueH + "," + $exp.value;} e1 = explistP[$valueH] {$value = $e1.value;}
+    | {$value = $valueH;};
 
 // ---------------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------------------------

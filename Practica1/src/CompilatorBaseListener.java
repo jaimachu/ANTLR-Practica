@@ -272,13 +272,13 @@ public class CompilatorBaseListener implements CompilatorListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterReturn(CompilatorParser.ReturnContext ctx) { }
+	@Override public void enterReturnn(CompilatorParser.ReturnnContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitReturn(CompilatorParser.ReturnContext ctx) { }
+	@Override public void exitReturnn(CompilatorParser.ReturnnContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
