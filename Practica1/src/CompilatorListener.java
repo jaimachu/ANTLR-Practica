@@ -1,4 +1,4 @@
-// Generated from java-escape by ANTLR 4.11.1
+// Generated from Compilator.g4 by ANTLR 4.12.0
 
     import java.util.HashMap;
     import java.io.File;
@@ -301,4 +301,124 @@ public interface CompilatorListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitExplistP(CompilatorParser.ExplistPContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CompilatorParser#ifr}.
+	 * @param ctx the parse tree
+	 */
+	void enterIfr(CompilatorParser.IfrContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CompilatorParser#ifr}.
+	 * @param ctx the parse tree
+	 */
+	void exitIfr(CompilatorParser.IfrContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CompilatorParser#elseP}.
+	 * @param ctx the parse tree
+	 */
+	void enterElseP(CompilatorParser.ElsePContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CompilatorParser#elseP}.
+	 * @param ctx the parse tree
+	 */
+	void exitElseP(CompilatorParser.ElsePContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CompilatorParser#elser}.
+	 * @param ctx the parse tree
+	 */
+	void enterElser(CompilatorParser.ElserContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CompilatorParser#elser}.
+	 * @param ctx the parse tree
+	 */
+	void exitElser(CompilatorParser.ElserContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CompilatorParser#whiler}.
+	 * @param ctx the parse tree
+	 */
+	void enterWhiler(CompilatorParser.WhilerContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CompilatorParser#whiler}.
+	 * @param ctx the parse tree
+	 */
+	void exitWhiler(CompilatorParser.WhilerContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CompilatorParser#dowhiler}.
+	 * @param ctx the parse tree
+	 */
+	void enterDowhiler(CompilatorParser.DowhilerContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CompilatorParser#dowhiler}.
+	 * @param ctx the parse tree
+	 */
+	void exitDowhiler(CompilatorParser.DowhilerContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CompilatorParser#forr}.
+	 * @param ctx the parse tree
+	 */
+	void enterForr(CompilatorParser.ForrContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CompilatorParser#forr}.
+	 * @param ctx the parse tree
+	 */
+	void exitForr(CompilatorParser.ForrContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CompilatorParser#forP}.
+	 * @param ctx the parse tree
+	 */
+	void enterForP(CompilatorParser.ForPContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CompilatorParser#forP}.
+	 * @param ctx the parse tree
+	 */
+	void exitForP(CompilatorParser.ForPContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CompilatorParser#expcond}.
+	 * @param ctx the parse tree
+	 */
+	void enterExpcond(CompilatorParser.ExpcondContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CompilatorParser#expcond}.
+	 * @param ctx the parse tree
+	 */
+	void exitExpcond(CompilatorParser.ExpcondContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CompilatorParser#expcondP}.
+	 * @param ctx the parse tree
+	 */
+	void enterExpcondP(CompilatorParser.ExpcondPContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CompilatorParser#expcondP}.
+	 * @param ctx the parse tree
+	 */
+	void exitExpcondP(CompilatorParser.ExpcondPContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CompilatorParser#oplog}.
+	 * @param ctx the parse tree
+	 */
+	void enterOplog(CompilatorParser.OplogContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CompilatorParser#oplog}.
+	 * @param ctx the parse tree
+	 */
+	void exitOplog(CompilatorParser.OplogContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CompilatorParser#factorcond}.
+	 * @param ctx the parse tree
+	 */
+	void enterFactorcond(CompilatorParser.FactorcondContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CompilatorParser#factorcond}.
+	 * @param ctx the parse tree
+	 */
+	void exitFactorcond(CompilatorParser.FactorcondContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CompilatorParser#opcomp}.
+	 * @param ctx the parse tree
+	 */
+	void enterOpcomp(CompilatorParser.OpcompContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CompilatorParser#opcomp}.
+	 * @param ctx the parse tree
+	 */
+	void exitOpcomp(CompilatorParser.OpcompContext ctx);
 }

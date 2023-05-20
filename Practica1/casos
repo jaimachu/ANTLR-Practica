@@ -7,6 +7,15 @@ string nombre = "alumno1";
 string codificar_cadena(string cadena, integer desplazamiento){
     string cadena2;
     cadena2 = (cadena + desplazamiento) * random(desplazamiento);
+    if(cadena=="hola"){
+    if(cadena=="hola"){
+    if(cadena=="hola"){
+    for(integer i=0; i<10; i=i+i){
+    printf(i);
+    }
+    }
+    }
+    }
     return(cadena2);
 }
 

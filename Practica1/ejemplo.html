@@ -22,17 +22,38 @@
 <SPAN CLASS="palres"> string </SPAN><SPAN CLASS="ident">codificar_cadena</SPAN> <span>(</span><SPAN CLASS="palres"> string </SPAN><A NAME="FUNCIONES:codificar_cadena:cadena"></A>
 <SPAN CLASS="ident">cadena</SPAN><span>,</span><SPAN CLASS="palres"> integer </SPAN><A NAME="FUNCIONES:codificar_cadena:desplazamiento"></A>
 <SPAN CLASS="ident">desplazamiento</SPAN> <span>)</span><span>{</span>
-<div style="text-indent: 2cm">
-	<A NAME="FUNCIONES:codificar_cadena:cadena2"></A> 
+<div style="text-indent:1cm">
+	<A NAME="cadena2"></A> 
 <SPAN CLASS="palres"> string </SPAN><SPAN CLASS="ident">cadena2</SPAN>;
 </div>
 
-<div style="text-indent: 2cm">
-	<a href="#FUNCIONES:codificar_cadena:cadena2">cadena2</a> = (<a href="#FUNCIONES:codificar_cadena:cadena">cadena</a> + <a href="#FUNCIONES:codificar_cadena:desplazamiento">desplazamiento</a>) * <a href="#null">random</a>(<a href="#FUNCIONES:codificar_cadena:desplazamiento">desplazamiento</a>);
+<div style="text-indent:1cm">
+	<a href="#cadena2">cadena2</a> = (<a href="#FUNCIONES:codificar_cadena:cadena">cadena</a> + <a href="#FUNCIONES:codificar_cadena:desplazamiento">desplazamiento</a>) * <a href="#null">random</a>(<a href="#FUNCIONES:codificar_cadena:desplazamiento">desplazamiento</a>);
 </div>
 
-<div style="text-indent: 2cm">
-	<SPAN CLASS="palres">return</SPAN>(<a href="#FUNCIONES:codificar_cadena:cadena2">cadena2</a>);
+<div style="text-indent:1cm">
+	<SPAN CLASS="palres">if</SPAN><span>(</span><a href="#FUNCIONES:codificar_cadena:cadena">cadena</a><span>==</span><SPAN CLASS="cte">"hola"</SPAN><span>)</span><span>{</span>
+<div style="text-indent:2cm">
+	<SPAN CLASS="palres">if</SPAN><span>(</span><a href="#FUNCIONES:codificar_cadena:cadena">cadena</a><span>==</span><SPAN CLASS="cte">"hola"</SPAN><span>)</span><span>{</span>
+<div style="text-indent:3cm">
+	<SPAN CLASS="palres">if</SPAN><span>(</span><a href="#FUNCIONES:codificar_cadena:cadena">cadena</a><span>==</span><SPAN CLASS="cte">"hola"</SPAN><span>)</span><span>{</span>
+<div style="text-indent:4cm">
+	<SPAN CLASS="palres">for</SPAN><span>(</span><A NAME="i"></A> 
+<SPAN CLASS="palres"> integer </SPAN><SPAN CLASS="ident">i</SPAN> = <SPAN CLASS="cte">0</SPAN><span>;</span><a href="#i">i</a><span><</span><SPAN CLASS="cte">10</SPAN><span>;</span><a href="#i">i</a> = <a href="#i">i</a> + <a href="#i">i</a><span>){</span>
+<div style="text-indent:5cm">
+	<a href="#null">printf</a>(<a href="#i">i</a>);
+</div>
+<div style="text-indent:4cm">}</div>
+</div>
+<div style="text-indent:3cm">}</div>
+</div>
+<div style="text-indent:2cm">}</div>
+</div>
+<div style="text-indent:1cm">}</div>
+</div>
+
+<div style="text-indent:1cm">
+	<SPAN CLASS="palres">return</SPAN>(<a href="#cadena2">cadena2</a>);
 </div>
 <span>}</span>
 <br>
@@ -41,11 +62,11 @@
 <hr><a NAME="FUNCIONES:save"></a>
 <SPAN CLASS="palres"> void </SPAN><SPAN CLASS="ident">save</SPAN> <span>(</span><SPAN CLASS="palres"> string </SPAN><A NAME="FUNCIONES:save:nombre"></A>
 <SPAN CLASS="ident">nombre</SPAN> <span>)</span><span>{</span>
-<div style="text-indent: 2cm">
+<div style="text-indent:1cm">
 	<a href="#null">fopen</a>(<SPAN CLASS="cte">"file.txt"</SPAN>, <SPAN CLASS="cte">"w"</SPAN>);
 </div>
 
-<div style="text-indent: 2cm">
+<div style="text-indent:1cm">
 	<a href="#null">printf</a>(<a href="#FUNCIONES:save:nombre">nombre</a>);
 </div>
 <span>}</span>
@@ -72,24 +93,24 @@
 <br>
 
 void <span class = "ident">Main</span>(){
-<div style="text-indent: 2cm">
-	<A NAME="PROGRAMA_PRINCIPAL:Main:codificado"></A> 
+<div style="text-indent:1cm">
+	<A NAME="codificado"></A> 
 <SPAN CLASS="palres"> string </SPAN><SPAN CLASS="ident">codificado</SPAN>;
 </div>
 
-<div style="text-indent: 2cm">
-	<a href="#PROGRAMA_PRINCIPAL:Main:codificado">codificado</a> = <a href="#null">codificar_cadena</a>(<a href="#FUNCIONES:save:nombre">nombre</a>, <a href="#PROGRAMA_PRINCIPAL:FECHA">FECHA</a>);
+<div style="text-indent:1cm">
+	<a href="#codificado">codificado</a> = <a href="#null">codificar_cadena</a>(<a href="#FUNCIONES:save:nombre">nombre</a>, <a href="#PROGRAMA_PRINCIPAL:FECHA">FECHA</a>);
 </div>
 
-<div style="text-indent: 2cm">
-	<a href="#null">save</a>(<a href="#PROGRAMA_PRINCIPAL:Main:codificado">codificado</a>);
+<div style="text-indent:1cm">
+	<a href="#null">save</a>(<a href="#codificado">codificado</a>);
 </div>
 
-<div style="text-indent: 2cm">
+<div style="text-indent:1cm">
 	<a href="#PROGRAMA_PRINCIPAL:n_alumnos">n_alumnos</a> = <a href="#PROGRAMA_PRINCIPAL:n_alumnos">n_alumnos</a> + <SPAN CLASS="cte">1</SPAN>;
 </div>
 
-<div style="text-indent: 2cm">
-	<a href="#PROGRAMA_PRINCIPAL:Main:codificado">codificado</a> = <a href="#null">codificar_cadena</a>(<a href="#FUNCIONES:save:nombre">nombre</a>, (<a href="#PROGRAMA_PRINCIPAL:CODIGO">CODIGO</a> DIV <a href="#PROGRAMA_PRINCIPAL:Main:codificado">codificado</a>));
+<div style="text-indent:1cm">
+	<a href="#codificado">codificado</a> = <a href="#null">codificar_cadena</a>(<a href="#FUNCIONES:save:nombre">nombre</a>, (<a href="#PROGRAMA_PRINCIPAL:CODIGO">CODIGO</a> DIV <a href="#codificado">codificado</a>));
 </div>
 }

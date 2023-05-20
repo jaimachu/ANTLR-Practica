@@ -162,7 +162,7 @@ funlist[String listCab, String listFunc, String listFuncName] returns [String ca
 
 // Estructura de la función
 funcdef returns [String cabecera, String vc, String funcName]
-    : funchead '{' code["","FUNCIONES:"+$funchead.funcName+":"] '}'{
+    : funchead '{' code["","FUNCIONES:"+$funchead.funcName+":", 1] '}'{
         $cabecera = $funchead.valueCab;
 
         $funcName = $funchead.funcName;
@@ -232,23 +232,26 @@ typedef2P[String nombreFuncion] returns [String vc, String value]
 // 3. DECLARACIÓN DEL CUERPO DEL PROGRAMA
 // ---------------------------------------------------------------------------------------------------------------------
 sentlist returns[String value]
-    :  mainhead '{' code["","PROGRAMA_PRINCIPAL:Main:"] '}' {$value = $mainhead.value + "{" + $code.value + "}";};
+    :  mainhead '{' code["","PROGRAMA_PRINCIPAL:Main:", 1] '}' {$value = $mainhead.value + "{" + $code.value + "}";};
 
 // Cabecera del programa principal
 mainhead returns[String value]
     : tvoid 'Main' '(' typedef1["PROGRAMA_PRINCIPAL:Main:"] ')' {$value = $tvoid.value + "<span class = \"ident\">Main</span>" + "(" + $typedef1.value + ")";};
 
 // Código con sus respectivas sentencias
-code[String valueH, String ref] returns[String value]
-    : sent[$ref] {$valueH = $valueH + $sent.value;} c1 = code[$valueH, $ref] {$value = $c1.value;}
+code[String valueH, String ref, int tab] returns[String value]
+    : sent[$ref, $tab] {$valueH = $valueH + $sent.value;} c1 = code[$valueH, $ref, $tab] {$value = $c1.value;}
 	| {$value = $valueH;};
 
-sent[String ref] returns[String value]
-    : asig ';' {$value = "\n<div style=\"text-indent: 2cm\">\n\t" + $asig.value + ";" + "\n</div>" + "\n";}
-    | funccall ';' {$value = "\n<div style=\"text-indent: 2cm\">\n\t" + $funccall.value + ";" + "\n</div>" + "\n";}
-    | vardef[$ref] ';' {$value = "\n<div style=\"text-indent: 2cm\">\n\t" + $vardef.value + ";" + "\n</div>" + "\n";}
-    | returnn ';' {$value = "\n<div style=\"text-indent: 2cm\">\n\t" + $returnn.value + ";" + "\n</div>" + "\n";};
-
+sent[String ref, int tab] returns[String value]
+    : asig ';' {$value = "\n<div style=\"text-indent:"+$tab+ "cm\">\n\t" + $asig.value + ";" + "\n</div>" + "\n";}
+    | funccall ';' {$value = "\n<div style=\"text-indent:"+$tab+ "cm\">\n\t" + $funccall.value + ";" + "\n</div>" + "\n";}
+    | vardef[""] ';' {$value = "\n<div style=\"text-indent:"+$tab+ "cm\">\n\t" + $vardef.value + ";" + "\n</div>" + "\n";}
+    | returnn ';' {$value = "\n<div style=\"text-indent:"+$tab+ "cm\">\n\t" + $returnn.value + ";" + "\n</div>" + "\n";}
+    | ifr[$tab] {$value = "\n<div style=\"text-indent:"+$tab+ "cm\">\n\t" + $ifr.value + "\n</div>" + "\n";}
+    | whiler[$tab] {$value = "\n<div style=\"text-indent:"+$tab+ "cm\">\n\t" + $whiler.value + "\n</div>" + "\n";}
+    | dowhiler[$tab] {$value = "\n<div style=\"text-indent:"+$tab+ "cm\">\n\t" + $dowhiler.value + "\n</div>" + "\n";}
+    | forr[$tab] {$value = "\n<div style=\"text-indent:"+$tab+ "cm\">\n\t" + $forr.value + "\n</div>" + "\n";};
 returnn returns[String value]
     : 'return' exp {$value = "<SPAN CLASS=\"palres\">" + "return" + "</SPAN>" + $exp.value;};
 
@@ -306,6 +309,60 @@ explist returns [String value]
 explistP[String valueH] returns [String value]
     : ',' exp {$valueH = $valueH + ", " + $exp.value;} e1 = explistP[$valueH] {$value = $e1.value;}
     | {$value = $valueH;};
+
+// Sentencias de control
+ifr[int tab] returns [String value]
+    : 'if' expcond '{' code["", "", $tab+1] '}' elseP[$tab] {
+        String valueif = "<SPAN CLASS=\"palres\">if</SPAN>" + $expcond.value;
+        $value = valueif + "<span>{</span>" + $code.value + "<div style=\"text-indent:"+$tab+ "cm\">}</div>" + $elseP.value;
+    };
+elseP[int tab] returns [String value]:
+    'else' elser[$tab] {$value = "<SPAN CLASS=\"palres\">else</SPAN>" + $elser.value;}
+    | {$value = "";};
+elser[int tab] returns [String value]
+    : '{' code["", "", $tab+1] '}' {
+        $value = "<span>{</span>" + $code.value + "<div style=\"text-indent:"+$tab+ "cm\">}</div>";
+    }
+    | ifr[$tab+1] {$value = $ifr.value;};
+whiler[int tab] returns [String value]
+    : 'while' '(' expcond ')' '{' code["", "", $tab+1] '}'{
+        $value = "<SPAN CLASS=\"palres\">while</SPAN>" + $expcond.value + "<span>){</span>" + $code.value + "<div style=\"text-indent:"+$tab+ "cm\">}</div>";
+    };
+dowhiler[int tab] returns [String value]
+    : 'do' '{' code["", "", $tab+1] '}' 'while' '(' expcond ')' ';'{
+        $value = "<SPAN CLASS=\"palres\">do{</SPAN>" + $code.value + "<div style=\"text-indent:"+$tab+ "cm\">}</div>" + "<SPAN CLASS=\"palres\">while</SPAN>" + $expcond.value + "<span>);</span>";
+    };
+forr[int tab] returns [String value]
+    : 'for' '(' forP[$tab]{
+        $value = "<SPAN CLASS=\"palres\">for</SPAN>" + "<span>(</span>" + $forP.value;
+    };
+forP[int tab] returns [String value]
+    : vardef[""] ';' expcond ';' asig ')' '{' code["", "", $tab+1] '}'{
+        $value = $vardef.value + "<span>;</span>" + $expcond.value + "<span>;</span>" + $asig.value + "<span>){</span>" + $code.value + "<div style=\"text-indent:"+$tab+ "cm\">}</div>";
+    }
+    | asig ';' expcond ';' asig ')' '{' code["", "", $tab+1] '}'{
+        $value = $asig.value + "<span>;</span>" + $expcond.value + "<span>;</span>" + $asig.value + "<span>){</span>" + $code.value + "<div style=\"text-indent:"+$tab+ "cm\">}</div>";
+    };
+
+
+expcond returns [String value]
+    : factorcond expcondP[""] {$value = $factorcond.value + $expcondP.value;};
+expcondP[String vh] returns [String value]
+    : oplog factorcond {$vh = $vh + $oplog.value + $factorcond.value;} e1 = expcondP[vh] {$value = $e1.value;}
+    | {$value = vh;};
+oplog returns [String value]
+    : '||' {$value = "<span>||</span>";}
+    | '&' {$value = "<span>&</span>";};
+factorcond returns [String value]
+    : e1 = exp opcomp e2 = exp {$value = $e1.value + $opcomp.value + $e2.value;}
+    | '(' expcond ')' {$value = "<span>(</span>" + $expcond.value + "<span>)</span>";}
+    | '!' factorcond {$value = "<span>!</span>" + $factorcond.value;};
+opcomp returns [String value]
+    : '<' {$value = "<span><</span>";}
+    | '>' {$value = "<span>></span>";}
+    | '<=' {$value = "<span><=</span>";}
+    | '>=' {$value = "<span>>=</span>";}
+    | '==' {$value = "<span>==</span>";};
 
 // ---------------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------------------------
