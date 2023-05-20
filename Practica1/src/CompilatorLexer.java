@@ -1,5 +1,6 @@
 // Generated from java-escape by ANTLR 4.11.1
 
+    import java.util.HashMap;
     import java.io.File;
     import java.io.FileWriter;
 
@@ -99,6 +100,10 @@ public class CompilatorLexer extends Lexer {
 	}
 
 
+	    private HashMap<String, String> variables = new HashMap<>();
+
+
+
 	public CompilatorLexer(CharStream input) {
 		super(input);
 		_interp = new LexerATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
@@ -137,7 +142,7 @@ public class CompilatorLexer extends Lexer {
 			    String cadena = getText();
 			    cadena = cadena.replace("\\'", "'");
 			    cadena = cadena.replace("\\\"", "\"");
-			    cadena = cadena.substring(1, cadena.length()-1);
+
 			    setText(cadena);
 			    
 			break;

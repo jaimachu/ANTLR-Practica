@@ -1,5 +1,6 @@
 // Generated from java-escape by ANTLR 4.11.1
 
+    import java.util.HashMap;
     import java.io.File;
     import java.io.FileWriter;
 
@@ -60,26 +61,6 @@ public interface CompilatorListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitSimpvalue(CompilatorParser.SimpvalueContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CompilatorParser#varlist}.
-	 * @param ctx the parse tree
-	 */
-	void enterVarlist(CompilatorParser.VarlistContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CompilatorParser#varlist}.
-	 * @param ctx the parse tree
-	 */
-	void exitVarlist(CompilatorParser.VarlistContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CompilatorParser#varlistP}.
-	 * @param ctx the parse tree
-	 */
-	void enterVarlistP(CompilatorParser.VarlistPContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CompilatorParser#varlistP}.
-	 * @param ctx the parse tree
-	 */
-	void exitVarlistP(CompilatorParser.VarlistPContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link CompilatorParser#vardef}.
 	 * @param ctx the parse tree

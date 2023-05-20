@@ -1,5 +1,6 @@
 // Generated from java-escape by ANTLR 4.11.1
 
+    import java.util.HashMap;
     import java.io.File;
     import java.io.FileWriter;
 
@@ -75,30 +76,6 @@ public class CompilatorBaseListener implements CompilatorListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitSimpvalue(CompilatorParser.SimpvalueContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterVarlist(CompilatorParser.VarlistContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitVarlist(CompilatorParser.VarlistContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterVarlistP(CompilatorParser.VarlistPContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitVarlistP(CompilatorParser.VarlistPContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
