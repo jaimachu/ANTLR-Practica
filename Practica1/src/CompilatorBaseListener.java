@@ -81,6 +81,30 @@ public class CompilatorBaseListener implements CompilatorListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterVarlist(CompilatorParser.VarlistContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitVarlist(CompilatorParser.VarlistContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterVarlistP(CompilatorParser.VarlistPContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitVarlistP(CompilatorParser.VarlistPContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterVardef(CompilatorParser.VardefContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -124,6 +148,18 @@ public class CompilatorBaseListener implements CompilatorListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitTvoid(CompilatorParser.TvoidContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStruct(CompilatorParser.StructContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStruct(CompilatorParser.StructContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

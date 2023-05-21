@@ -62,6 +62,26 @@ public interface CompilatorListener extends ParseTreeListener {
 	 */
 	void exitSimpvalue(CompilatorParser.SimpvalueContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link CompilatorParser#varlist}.
+	 * @param ctx the parse tree
+	 */
+	void enterVarlist(CompilatorParser.VarlistContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CompilatorParser#varlist}.
+	 * @param ctx the parse tree
+	 */
+	void exitVarlist(CompilatorParser.VarlistContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CompilatorParser#varlistP}.
+	 * @param ctx the parse tree
+	 */
+	void enterVarlistP(CompilatorParser.VarlistPContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CompilatorParser#varlistP}.
+	 * @param ctx the parse tree
+	 */
+	void exitVarlistP(CompilatorParser.VarlistPContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link CompilatorParser#vardef}.
 	 * @param ctx the parse tree
 	 */
@@ -101,6 +121,16 @@ public interface CompilatorListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitTvoid(CompilatorParser.TvoidContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CompilatorParser#struct}.
+	 * @param ctx the parse tree
+	 */
+	void enterStruct(CompilatorParser.StructContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CompilatorParser#struct}.
+	 * @param ctx the parse tree
+	 */
+	void exitStruct(CompilatorParser.StructContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link CompilatorParser#funlist}.
 	 * @param ctx the parse tree

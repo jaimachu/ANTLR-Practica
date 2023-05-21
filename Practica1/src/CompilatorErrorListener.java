@@ -20,7 +20,8 @@ public class CompilatorErrorListener extends BaseErrorListener {
                 .replace("mismatched input", "entrada no válida")
                 .replace("missing", "falta el carácter")
                 .replace("expecting", "esperaba")
-                .replace("at", "en");
+                .replace("at", "en")
+                .replace("no viable alternenive en input", "ninguna alternativa viable en la entrada");
         String[] array = (""+line).split(":");
         String linea = array[0];
 

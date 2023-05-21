@@ -63,6 +63,7 @@ program :
 
                     //Variables
                     escribir.write($dcllist.value);
+                    escribir.write("<BR/>");
 
                     //Main()
 
@@ -101,18 +102,22 @@ simpvalue returns[String vc]
     | STRING_CONST {$vc = "<SPAN CLASS=\"cte\">"+ $STRING_CONST.text +"</SPAN>";};
 
 // Estructura de una declaración de variable
-//varlist : vardef[] ';' varlistP;//TODO:
-//varlistP :
-//    vardef[] ';' varlistP
-//	| ;
+varlist[String vh] returns [String value]
+    : vardef[""] ';' varlistP[vh] {$value = $vardef.value + ";" + $varlistP.value;};
+varlistP[String vh] returns [String value]:
+    vardef[""] ';' {$vh = $vh + $vardef.value + ";";} v1 = varlistP[$vh] {$value = $v1.value;}
+	| {$value = $vh;};
 
 
 
-vardef[String ref] returns [String value]:
-    tbas IDENTIFIER vardefP {
+vardef[String ref] returns [String value]
+    :tbas IDENTIFIER vardefP {
 
-    $value ="<A NAME=\""+$ref+$IDENTIFIER.text+"\"></A> \n"+ $tbas.vc + "<SPAN CLASS=\"ident\">" + $IDENTIFIER.text +"</SPAN>" + $vardefP.value;
-    variables.put($IDENTIFIER.text, $ref+$IDENTIFIER.text);
+        $value ="<A NAME=\""+$ref+$IDENTIFIER.text+"\"></A> \n"+ $tbas.vc + "<SPAN CLASS=\"ident\">" + $IDENTIFIER.text +"</SPAN>" + $vardefP.value;
+        variables.put($IDENTIFIER.text, $ref+$IDENTIFIER.text);
+    }
+    | struct{
+        $value = $struct.value;
     };
 
 vardefP returns [String value]
@@ -138,6 +143,11 @@ tvoid returns [String vc, String value]
     : 'void' {
         $value = "void ";
         $vc = "<SPAN CLASS=\"palres\"> void </SPAN>";
+    };
+
+struct returns [String value]
+    : 'struct' '{' varlist[""] '}'{
+        $value = "<SPAN CLASS=\"palres\"> struct </SPAN>" + "<span>{</span>" + "<BR/>" + "<DIV style=\"text-indent: 1cm\">" + $varlist.value + "</DIV>" + "<span>}</span>";
     };
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -236,7 +246,7 @@ sentlist returns[String value]
 
 // Cabecera del programa principal
 mainhead returns[String value]
-    : tvoid 'Main' '(' typedef1["PROGRAMA_PRINCIPAL:Main:"] ')' {$value = $tvoid.value + "<span class = \"ident\">Main</span>" + "(" + $typedef1.value + ")";};
+    : tvoid 'Main' '(' typedef1["PROGRAMA_PRINCIPAL:Main:"] ')' {$value = $tvoid.vc + "<span class = \"ident\">Main</span>" + "(" + $typedef1.value + ")";};
 
 // Código con sus respectivas sentencias
 code[String valueH, String ref, int tab] returns[String value]
