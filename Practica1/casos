@@ -1,37 +1,28 @@
-#define FECHA 2023
-#define CODIGO 10
-integer n_alumnos;
-struct{
-    integer num1 = 1;
-};
-float __valor_real;
-string nombre = "alumno1";
-
-
-string codificar_cadena(string cadena, integer desplazamiento){
-    string cadena2;
-    cadena2 = (cadena + desplazamiento) * random(desplazamiento);
-    if(cadena=="hola"){
-    if(cadena=="hola"){
-    if(cadena=="hola"){
-    for(integer i=0; i<10; i=i+i){
-    printf(i);
+integer binarySearch (integer left, integer right, integer target) {
+    while (left <= right) {
+        integer mid;
+        mid = left + (right - left) DIV 2;
+        if (mid == target) {
+            return mid;
+        }
+        if (mid < target) {
+            left = mid + 1;
+        } else if(1==1) {
+            right = mid - 1;
+        }
     }
-    }
-    }
-    }
-    return(cadena2);
+    return -1;
 }
 
-void save(string nombre){
-    fopen("file.txt", "w");
-    printf(nombre);
-}
-
-void Main (){
-    string codificado;
-    codificado = codificar_cadena(nombre, FECHA);
-    save(codificado);
-    n_alumnos = n_alumnos + 1;
-    codificado = codificar_cadena(nombre, (CODIGO DIV codificado));
+void Main() {
+    integer left = 1;
+    integer right = 10;
+    integer target = 7;
+    integer result;
+    result = binarySearch(left, right, target);
+    if (result == -1) {
+        printf("Elemento no encontrado\n");
+    } else {
+        printf("Elemento encontrado: %d\n", result);
+    }
 }
