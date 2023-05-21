@@ -505,6 +505,7 @@ public class CompilatorParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class VarlistContext extends ParserRuleContext {
+		public String ref;
 		public String vh;
 		public String value;
 		public VardefContext vardef;
@@ -516,8 +517,9 @@ public class CompilatorParser extends Parser {
 			return getRuleContext(VarlistPContext.class,0);
 		}
 		public VarlistContext(ParserRuleContext parent, int invokingState) { super(parent, invokingState); }
-		public VarlistContext(ParserRuleContext parent, int invokingState, String vh) {
+		public VarlistContext(ParserRuleContext parent, int invokingState, String ref, String vh) {
 			super(parent, invokingState);
+			this.ref = ref;
 			this.vh = vh;
 		}
 		@Override public int getRuleIndex() { return RULE_varlist; }
@@ -531,18 +533,18 @@ public class CompilatorParser extends Parser {
 		}
 	}
 
-	public final VarlistContext varlist(String vh) throws RecognitionException {
-		VarlistContext _localctx = new VarlistContext(_ctx, getState(), vh);
+	public final VarlistContext varlist(String ref,String vh) throws RecognitionException {
+		VarlistContext _localctx = new VarlistContext(_ctx, getState(), ref, vh);
 		enterRule(_localctx, 10, RULE_varlist);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(123);
-			((VarlistContext)_localctx).vardef = vardef("");
+			((VarlistContext)_localctx).vardef = vardef(_localctx.ref);
 			setState(124);
 			match(T__0);
 			setState(125);
-			((VarlistContext)_localctx).varlistP = varlistP(vh);
+			((VarlistContext)_localctx).varlistP = varlistP(_localctx.ref,_localctx.vh);
 			((VarlistContext)_localctx).value =  ((VarlistContext)_localctx).vardef.value + ";" + ((VarlistContext)_localctx).varlistP.value;
 			}
 		}
@@ -559,6 +561,7 @@ public class CompilatorParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class VarlistPContext extends ParserRuleContext {
+		public String ref;
 		public String vh;
 		public String value;
 		public VardefContext vardef;
@@ -570,8 +573,9 @@ public class CompilatorParser extends Parser {
 			return getRuleContext(VarlistPContext.class,0);
 		}
 		public VarlistPContext(ParserRuleContext parent, int invokingState) { super(parent, invokingState); }
-		public VarlistPContext(ParserRuleContext parent, int invokingState, String vh) {
+		public VarlistPContext(ParserRuleContext parent, int invokingState, String ref, String vh) {
 			super(parent, invokingState);
+			this.ref = ref;
 			this.vh = vh;
 		}
 		@Override public int getRuleIndex() { return RULE_varlistP; }
@@ -585,8 +589,8 @@ public class CompilatorParser extends Parser {
 		}
 	}
 
-	public final VarlistPContext varlistP(String vh) throws RecognitionException {
-		VarlistPContext _localctx = new VarlistPContext(_ctx, getState(), vh);
+	public final VarlistPContext varlistP(String ref,String vh) throws RecognitionException {
+		VarlistPContext _localctx = new VarlistPContext(_ctx, getState(), ref, vh);
 		enterRule(_localctx, 12, RULE_varlistP);
 		try {
 			setState(135);
@@ -599,12 +603,12 @@ public class CompilatorParser extends Parser {
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(128);
-				((VarlistPContext)_localctx).vardef = vardef("");
+				((VarlistPContext)_localctx).vardef = vardef(_localctx.ref);
 				setState(129);
 				match(T__0);
 				((VarlistPContext)_localctx).vh =  _localctx.vh + ((VarlistPContext)_localctx).vardef.value + ";";
 				setState(131);
-				((VarlistPContext)_localctx).v1 = varlistP(_localctx.vh);
+				((VarlistPContext)_localctx).v1 = varlistP(_localctx.ref,_localctx.vh);
 				((VarlistPContext)_localctx).value =  ((VarlistPContext)_localctx).v1.value;
 				}
 				break;
@@ -692,7 +696,7 @@ public class CompilatorParser extends Parser {
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(142);
-				((VardefContext)_localctx).struct = struct();
+				((VardefContext)_localctx).struct = struct(_localctx.ref);
 
 				        ((VardefContext)_localctx).value =  ((VardefContext)_localctx).struct.value;
 				    
@@ -890,13 +894,16 @@ public class CompilatorParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class StructContext extends ParserRuleContext {
+		public String ref;
 		public String value;
 		public VarlistContext varlist;
 		public VarlistContext varlist() {
 			return getRuleContext(VarlistContext.class,0);
 		}
-		public StructContext(ParserRuleContext parent, int invokingState) {
+		public StructContext(ParserRuleContext parent, int invokingState) { super(parent, invokingState); }
+		public StructContext(ParserRuleContext parent, int invokingState, String ref) {
 			super(parent, invokingState);
+			this.ref = ref;
 		}
 		@Override public int getRuleIndex() { return RULE_struct; }
 		@Override
@@ -909,8 +916,8 @@ public class CompilatorParser extends Parser {
 		}
 	}
 
-	public final StructContext struct() throws RecognitionException {
-		StructContext _localctx = new StructContext(_ctx, getState());
+	public final StructContext struct(String ref) throws RecognitionException {
+		StructContext _localctx = new StructContext(_ctx, getState(), ref);
 		enterRule(_localctx, 22, RULE_struct);
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -920,7 +927,7 @@ public class CompilatorParser extends Parser {
 			setState(166);
 			match(T__8);
 			setState(167);
-			((StructContext)_localctx).varlist = varlist("");
+			((StructContext)_localctx).varlist = varlist(_localctx.ref,"");
 			setState(168);
 			match(T__9);
 
@@ -1692,7 +1699,7 @@ public class CompilatorParser extends Parser {
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(250);
-				((SentContext)_localctx).vardef = vardef("");
+				((SentContext)_localctx).vardef = vardef(_localctx.ref);
 				setState(251);
 				match(T__0);
 				((SentContext)_localctx).value =  "\n<div style=\"text-indent:"+_localctx.tab+ "cm\">\n\t" + ((SentContext)_localctx).vardef.value + ";" + "\n</div>" + "\n";

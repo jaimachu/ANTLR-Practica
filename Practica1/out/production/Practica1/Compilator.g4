@@ -112,10 +112,10 @@ simpvalue returns[String vc]
     | STRING_CONST {$vc = "<SPAN CLASS=\"cte\">"+ $STRING_CONST.text +"</SPAN>";};
 
 // Estructura de una declaración de variable
-varlist[String vh] returns [String value]
-    : vardef[""] ';' varlistP[vh] {$value = $vardef.value + ";" + $varlistP.value;};
-varlistP[String vh] returns [String value]:
-    vardef[""] ';' {$vh = $vh + $vardef.value + ";";} v1 = varlistP[$vh] {$value = $v1.value;}
+varlist[String ref, String vh] returns [String value]
+    : vardef[$ref] ';' varlistP[$ref,$vh] {$value = $vardef.value + ";" + $varlistP.value;};
+varlistP[String ref, String vh] returns [String value]:
+    vardef[$ref] ';' {$vh = $vh + $vardef.value + ";";} v1 = varlistP[$ref,$vh] {$value = $v1.value;}
 	| {$value = $vh;};
 
 
@@ -126,7 +126,7 @@ vardef[String ref] returns [String value]
         $value ="<A NAME=\""+$ref+$IDENTIFIER.text+"\"></A> \n"+ $tbas.vc + "<SPAN CLASS=\"ident\">" + $IDENTIFIER.text +"</SPAN>" + $vardefP.value;
         variables.put($IDENTIFIER.text, $ref+$IDENTIFIER.text);
     }
-    | struct{
+    | struct[$ref]{
         $value = $struct.value;
     };
 
@@ -155,8 +155,8 @@ tvoid returns [String vc, String value]
         $vc = "<SPAN CLASS=\"palres\"> void </SPAN>";
     };
 
-struct returns [String value]
-    : 'struct' '{' varlist[""] '}'{
+struct[String ref]  returns [String value]
+    : 'struct' '{' varlist[$ref,""] '}'{
         $value = "<SPAN CLASS=\"palres\"> struct </SPAN>" + "<span>{</span>" + "<BR/>" + "<DIV style=\"text-indent: 1cm\">" + $varlist.value + "</DIV>" + "<span>}</span>";
     };
 
@@ -278,7 +278,7 @@ code[String valueH, String ref, int tab] returns[String value]
 sent[String ref, int tab] returns[String value]
     : asig ';' {$value = "\n<div style=\"text-indent:"+$tab+ "cm\">\n\t" + $asig.value + ";" + "\n</div>" + "\n";}
     | funccall ';' {$value = "\n<div style=\"text-indent:"+$tab+ "cm\">\n\t" + $funccall.value + ";" + "\n</div>" + "\n";}
-    | vardef[""] ';' {$value = "\n<div style=\"text-indent:"+$tab+ "cm\">\n\t" + $vardef.value + ";" + "\n</div>" + "\n";}
+    | vardef[$ref] ';' {$value = "\n<div style=\"text-indent:"+$tab+ "cm\">\n\t" + $vardef.value + ";" + "\n</div>" + "\n";}
     | returnn ';' {$value = "\n<div style=\"text-indent:"+$tab+ "cm\">\n\t" + $returnn.value + ";" + "\n</div>" + "\n";}
     | ifr[$tab] {$value = "\n<div style=\"text-indent:"+$tab+ "cm\">\n\t" + $ifr.value + "\n</div>" + "\n";}
     | whiler[$tab] {$value = "\n<div style=\"text-indent:"+$tab+ "cm\">\n\t" + $whiler.value + "\n</div>" + "\n";}
@@ -351,7 +351,6 @@ subpparamlist returns [String value]:
 // Lista de expresiones
 explist returns [String value]
     : exp explistP[""] {$value = $exp.value + $explistP.value;};
-
 
 explistP[String valueH] returns [String value]
     : ',' exp {$valueH = $valueH + ", " + $exp.value;} e1 = explistP[$valueH] {$value = $e1.value;}
