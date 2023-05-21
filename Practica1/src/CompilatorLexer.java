@@ -1,4 +1,4 @@
-// Generated from java-escape by ANTLR 4.11.1
+// Generated from Compilator.g4 by ANTLR 4.12.0
 
     import java.util.HashMap;
     import java.io.File;
@@ -15,7 +15,7 @@ import org.antlr.v4.runtime.misc.*;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast", "CheckReturnValue"})
 public class CompilatorLexer extends Lexer {
-	static { RuntimeMetaData.checkVersion("4.11.1", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.12.0", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
@@ -105,11 +105,6 @@ public class CompilatorLexer extends Lexer {
 	public Vocabulary getVocabulary() {
 		return VOCABULARY;
 	}
-
-
-	    private HashMap<String, String> variables = new HashMap<>();
-	    private HashMap<String, String> funciones = new HashMap<>();
-
 
 
 	public CompilatorLexer(CharStream input) {
