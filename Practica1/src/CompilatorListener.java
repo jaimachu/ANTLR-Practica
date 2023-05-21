@@ -1,4 +1,4 @@
-// Generated from Compilator.g4 by ANTLR 4.12.0
+// Generated from java-escape by ANTLR 4.11.1
 
     import java.util.HashMap;
     import java.io.File;

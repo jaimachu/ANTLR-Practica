@@ -1,4 +1,4 @@
-// Generated from Compilator.g4 by ANTLR 4.12.0
+// Generated from java-escape by ANTLR 4.11.1
 
     import java.util.HashMap;
     import java.io.File;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast", "CheckReturnValue"})
 public class CompilatorParser extends Parser {
-	static { RuntimeMetaData.checkVersion("4.12.0", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.11.1", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
@@ -109,7 +109,7 @@ public class CompilatorParser extends Parser {
 	}
 
 	@Override
-	public String getGrammarFileName() { return "Compilator.g4"; }
+	public String getGrammarFileName() { return "java-escape"; }
 
 	@Override
 	public String[] getRuleNames() { return ruleNames; }
@@ -122,6 +122,7 @@ public class CompilatorParser extends Parser {
 
 
 	    private HashMap<String, String> variables = new HashMap<>();
+	    private HashMap<String, String> funciones = new HashMap<>();
 
 
 	public CompilatorParser(TokenStream input) {
@@ -192,7 +193,7 @@ public class CompilatorParser extends Parser {
 			                    "    } \n" +
 			                    "</style>\n");
 			                    escribir.write("<hr/>\n");
-			                    escribir.write("<a name=\"main\"></a>\n");
+			                    escribir.write("<a name=\"PROGRAMA\"></a>\n");
 
 			                    //PROGRAMA
 			                    escribir.write("<h1>Programa: XXXX</h1>\n");
@@ -409,7 +410,7 @@ public class CompilatorParser extends Parser {
 			((CtedefContext)_localctx).simpvalue = simpvalue();
 
 			    String v = "<A NAME =\"PROGRAMA_PRINCIPAL:"+(((CtedefContext)_localctx).CONST_DEF_IDENTIFIER!=null?((CtedefContext)_localctx).CONST_DEF_IDENTIFIER.getText():null)+"\"></A><span style=\"font-weight: bold;\">#define</span> <span CLASS=\"ident\">"+ (((CtedefContext)_localctx).CONST_DEF_IDENTIFIER!=null?((CtedefContext)_localctx).CONST_DEF_IDENTIFIER.getText():null) +"</span>";
-			    ((CtedefContext)_localctx).value =  v+" "+((CtedefContext)_localctx).simpvalue.vc+"\n<br>\n";
+			    ((CtedefContext)_localctx).value =  v+" "+"<SPAN CLASS = \" cte\">\"</SPAN>"+((CtedefContext)_localctx).simpvalue.vc+"<SPAN CLASS = \" cte\">\"</SPAN>"+"\n<br>\n";
 			    variables.put((((CtedefContext)_localctx).CONST_DEF_IDENTIFIER!=null?((CtedefContext)_localctx).CONST_DEF_IDENTIFIER.getText():null), "PROGRAMA_PRINCIPAL:"+(((CtedefContext)_localctx).CONST_DEF_IDENTIFIER!=null?((CtedefContext)_localctx).CONST_DEF_IDENTIFIER.getText():null));
 			}
 		}
@@ -1059,8 +1060,8 @@ public class CompilatorParser extends Parser {
 			        ((FuncdefContext)_localctx).funcName =  ((FuncdefContext)_localctx).funchead.funcName;
 
 			        String codigo = ((FuncdefContext)_localctx).code.value;
-			        String iniFunc = "<a href=" + "\"#" + _localctx.funcName + "\"" + "><span>Inicio de la función</span></a>\n";
-			        String iniProg = "<a href=\"#main\"><span> Inicio del programa</span></a>\n";
+			        String iniFunc = "<a href=" + "\"#" + "FUNCIONES:"+((FuncdefContext)_localctx).funchead.funcName + "\"" + "><span>Inicio de la función</span></a>\n";
+			        String iniProg = "<a href=\"#PROGRAMA\"><span> Inicio del programa</span></a>\n";
 
 			        ((FuncdefContext)_localctx).vc =  "<a NAME=" + "\"FUNCIONES:" + _localctx.funcName + "\"" + "></a>\n" + ((FuncdefContext)_localctx).funchead.vc + "<span>{</span>" + codigo +"<span>}</span>" + "\n<br>\n" + iniFunc + iniProg + "<hr>";
 			    
@@ -1133,6 +1134,9 @@ public class CompilatorParser extends Parser {
 				setState(189);
 				match(T__11);
 
+
+				        funciones.put((((FuncheadContext)_localctx).IDENTIFIER!=null?((FuncheadContext)_localctx).IDENTIFIER.getText():null), "FUNCIONES:"+(((FuncheadContext)_localctx).IDENTIFIER!=null?((FuncheadContext)_localctx).IDENTIFIER.getText():null));
+
 				        ((FuncheadContext)_localctx).valueCab =  ((FuncheadContext)_localctx).tbas.value + (((FuncheadContext)_localctx).IDENTIFIER!=null?((FuncheadContext)_localctx).IDENTIFIER.getText():null) + "(" + ((FuncheadContext)_localctx).typedef1.value + ")";
 
 				        ((FuncheadContext)_localctx).funcName =  (((FuncheadContext)_localctx).IDENTIFIER!=null?((FuncheadContext)_localctx).IDENTIFIER.getText():null);
@@ -1155,6 +1159,9 @@ public class CompilatorParser extends Parser {
 				((FuncheadContext)_localctx).typedef1 = typedef1("FUNCIONES:"+(((FuncheadContext)_localctx).IDENTIFIER!=null?((FuncheadContext)_localctx).IDENTIFIER.getText():null)+":");
 				setState(196);
 				match(T__11);
+
+
+				        funciones.put((((FuncheadContext)_localctx).IDENTIFIER!=null?((FuncheadContext)_localctx).IDENTIFIER.getText():null), "FUNCIONES:"+(((FuncheadContext)_localctx).IDENTIFIER!=null?((FuncheadContext)_localctx).IDENTIFIER.getText():null));
 
 				        ((FuncheadContext)_localctx).valueCab =  ((FuncheadContext)_localctx).tvoid.value + (((FuncheadContext)_localctx).IDENTIFIER!=null?((FuncheadContext)_localctx).IDENTIFIER.getText():null) + "(" + ((FuncheadContext)_localctx).typedef1.value + ")";
 
@@ -1435,7 +1442,13 @@ public class CompilatorParser extends Parser {
 			((SentlistContext)_localctx).code = code("","PROGRAMA_PRINCIPAL:Main:", 1);
 			setState(224);
 			match(T__9);
-			((SentlistContext)_localctx).value =  ((SentlistContext)_localctx).mainhead.value + "{" + ((SentlistContext)_localctx).code.value + "}";
+
+
+			     String iniFunc = "<a href=" + "\"#" + "PROGRAMA_PRINCIPAL:Main" + "\"" + "><span>Inicio de la función</span></a>\n";
+			     String iniProg = "<a href=\"#PROGRAMA\"><span> Inicio del programa</span></a>\n";
+
+			    ((SentlistContext)_localctx).value =  "<a NAME=" + "\"PROGRAMA_PRINCIPAL:Main\"" + "></a>\n" +((SentlistContext)_localctx).mainhead.value + "{" + ((SentlistContext)_localctx).code.value + "} <br>"+iniFunc+iniProg+"\n<hr>";
+			    
 			}
 		}
 		catch (RecognitionException re) {
@@ -2166,7 +2179,19 @@ public class CompilatorParser extends Parser {
 				((FunccallContext)_localctx).subpparamlist = subpparamlist();
 
 				    String refVar = variables.get((((FunccallContext)_localctx).IDENTIFIER!=null?((FunccallContext)_localctx).IDENTIFIER.getText():null));
-				    ((FunccallContext)_localctx).value =  "<a href=\"#"+ refVar +"\">" + (((FunccallContext)_localctx).IDENTIFIER!=null?((FunccallContext)_localctx).IDENTIFIER.getText():null) +"</a>" + ((FunccallContext)_localctx).subpparamlist.value;
+				    String refFunc;
+				    if(refVar==null){ //Es una funcion y no una variable.
+				        refFunc=funciones.get((((FunccallContext)_localctx).IDENTIFIER!=null?((FunccallContext)_localctx).IDENTIFIER.getText():null));
+				        if(refFunc!=null){
+
+				            ((FunccallContext)_localctx).value =  "<a href=\"#"+ refFunc +"\">" + (((FunccallContext)_localctx).IDENTIFIER!=null?((FunccallContext)_localctx).IDENTIFIER.getText():null) +"</a>" + ((FunccallContext)_localctx).subpparamlist.value;
+				        }else{
+				            ((FunccallContext)_localctx).value =  "<SPAN CLASS=\"ident\">" + (((FunccallContext)_localctx).IDENTIFIER!=null?((FunccallContext)_localctx).IDENTIFIER.getText():null) +"</SPAN>" + ((FunccallContext)_localctx).subpparamlist.value;
+				        }
+				    }else{
+				        ((FunccallContext)_localctx).value =  "<a href=\"#"+ refVar +"\">" + (((FunccallContext)_localctx).IDENTIFIER!=null?((FunccallContext)_localctx).IDENTIFIER.getText():null) +"</a>" + ((FunccallContext)_localctx).subpparamlist.value;
+				    }
+
 				}
 				break;
 			case CONST_DEF_IDENTIFIER:

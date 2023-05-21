@@ -8,6 +8,7 @@ grammar Compilator;
 
 @members {
     private HashMap<String, String> variables = new HashMap<>();
+    private HashMap<String, String> funciones = new HashMap<>();
 
 }
 // ---------------------------------------------------
@@ -41,7 +42,7 @@ program :
                     "    } \n" +
                     "</style>\n");
                     escribir.write("<hr/>\n");
-                    escribir.write("<a name=\"main\"></a>\n");
+                    escribir.write("<a name=\"PROGRAMA\"></a>\n");
 
                     //PROGRAMA
                     escribir.write("<h1>Programa: XXXX</h1>\n");
@@ -92,7 +93,7 @@ dcl returns [String value]:
 ctedef returns [String value]:
     '#define' CONST_DEF_IDENTIFIER simpvalue {
     String v = "<A NAME =\"PROGRAMA_PRINCIPAL:"+$CONST_DEF_IDENTIFIER.text+"\"></A><span style=\"font-weight: bold;\">#define</span> <span CLASS=\"ident\">"+ $CONST_DEF_IDENTIFIER.text +"</span>";
-    $value = v+" "+$simpvalue.vc+"\n<br>\n";
+    $value = v+" "+"<SPAN CLASS = \" cte\">\"</SPAN>"+$simpvalue.vc+"<SPAN CLASS = \" cte\">\"</SPAN>"+"\n<br>\n";
     variables.put($CONST_DEF_IDENTIFIER.text, "PROGRAMA_PRINCIPAL:"+$CONST_DEF_IDENTIFIER.text);} ;
 
 // Valor de la constante o variable
@@ -178,8 +179,8 @@ funcdef returns [String cabecera, String vc, String funcName]
         $funcName = $funchead.funcName;
 
         String codigo = $code.value;
-        String iniFunc = "<a href=" + "\"#" + $funcName + "\"" + "><span>Inicio de la función</span></a>\n";
-        String iniProg = "<a href=\"#main\"><span> Inicio del programa</span></a>\n";
+        String iniFunc = "<a href=" + "\"#" + "FUNCIONES:"+$funchead.funcName + "\"" + "><span>Inicio de la función</span></a>\n";
+        String iniProg = "<a href=\"#PROGRAMA\"><span> Inicio del programa</span></a>\n";
 
         $vc = "<a NAME=" + "\"FUNCIONES:" + $funcName + "\"" + "></a>\n" + $funchead.vc + "<span>{</span>" + codigo +"<span>}</span>" + "\n<br>\n" + iniFunc + iniProg + "<hr>";
     };
@@ -187,6 +188,9 @@ funcdef returns [String cabecera, String vc, String funcName]
 // Estructura de la cabecera de la función
 funchead returns [String vc, String valueCab, String funcName]
     : tbas IDENTIFIER '(' typedef1["FUNCIONES:"+$IDENTIFIER.text+":"] ')' {
+
+        funciones.put($IDENTIFIER.text, "FUNCIONES:"+$IDENTIFIER.text);
+
         $valueCab = $tbas.value + $IDENTIFIER.text + "(" + $typedef1.value + ")";
 
         $funcName = $IDENTIFIER.text;
@@ -195,6 +199,9 @@ funchead returns [String vc, String valueCab, String funcName]
         $vc = $tbas.vc + identifier + " <span>(</span>" + $typedef1.vc + " <span>)</span>";
     }
     | tvoid IDENTIFIER '(' typedef1["FUNCIONES:"+$IDENTIFIER.text+":"] ')' {
+
+        funciones.put($IDENTIFIER.text, "FUNCIONES:"+$IDENTIFIER.text);
+
         $valueCab = $tvoid.value + $IDENTIFIER.text + "(" + $typedef1.value + ")";
 
         $funcName = $IDENTIFIER.text;
@@ -242,7 +249,13 @@ typedef2P[String nombreFuncion] returns [String vc, String value]
 // 3. DECLARACIÓN DEL CUERPO DEL PROGRAMA
 // ---------------------------------------------------------------------------------------------------------------------
 sentlist returns[String value]
-    :  mainhead '{' code["","PROGRAMA_PRINCIPAL:Main:", 1] '}' {$value = $mainhead.value + "{" + $code.value + "}";};
+    :  mainhead '{' code["","PROGRAMA_PRINCIPAL:Main:", 1] '}' {
+
+     String iniFunc = "<a href=" + "\"#" + "PROGRAMA_PRINCIPAL:Main" + "\"" + "><span>Inicio de la función</span></a>\n";
+     String iniProg = "<a href=\"#PROGRAMA\"><span> Inicio del programa</span></a>\n";
+
+    $value = "<a NAME=" + "\"PROGRAMA_PRINCIPAL:Main\"" + "></a>\n" +$mainhead.value + "{" + $code.value + "} <br>"+iniFunc+iniProg+"\n<hr>";
+    };
 
 // Cabecera del programa principal
 mainhead returns[String value]
@@ -300,7 +313,22 @@ factor returns [String value]
 funccall returns [String value]
     : IDENTIFIER subpparamlist {
     String refVar = variables.get($IDENTIFIER.text);
-    $value = "<a href=\"#"+ refVar +"\">" + $IDENTIFIER.text +"</a>" + $subpparamlist.value;}
+    String refFunc;
+    if(refVar==null){ //Es una funcion y no una variable.
+        refFunc=funciones.get($IDENTIFIER.text);
+        if(refFunc!=null){
+
+            $value = "<a href=\"#"+ refFunc +"\">" + $IDENTIFIER.text +"</a>" + $subpparamlist.value;
+        }else{
+            $value = "<SPAN CLASS=\"ident\">" + $IDENTIFIER.text +"</SPAN>" + $subpparamlist.value;
+        }
+    }else{
+        $value = "<a href=\"#"+ refVar +"\">" + $IDENTIFIER.text +"</a>" + $subpparamlist.value;
+    }
+}
+
+
+
     | CONST_DEF_IDENTIFIER subpparamlist {
     String refVar = variables.get($CONST_DEF_IDENTIFIER.text);
     $value = "<a href=\"#"+ refVar +"\">" + $CONST_DEF_IDENTIFIER.text +"</a>" + $subpparamlist.value;};

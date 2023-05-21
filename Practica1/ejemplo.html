@@ -10,7 +10,7 @@
     } 
 </style>
 <hr/>
-<a name="main"></a>
+<a name="PROGRAMA"></a>
 <h1>Programa: XXXX</h1>
 <h2>Funciones</h2>
 <ul>
@@ -28,7 +28,7 @@
 </div>
 
 <div style="text-indent:1cm">
-	<a href="#cadena2">cadena2</a> = (<a href="#FUNCIONES:codificar_cadena:cadena">cadena</a> + <a href="#FUNCIONES:codificar_cadena:desplazamiento">desplazamiento</a>) * <a href="#null">random</a>(<a href="#FUNCIONES:codificar_cadena:desplazamiento">desplazamiento</a>);
+	<a href="#cadena2">cadena2</a> = (<a href="#FUNCIONES:codificar_cadena:cadena">cadena</a> + <a href="#FUNCIONES:codificar_cadena:desplazamiento">desplazamiento</a>) * <SPAN CLASS="ident">random</SPAN>(<a href="#FUNCIONES:codificar_cadena:desplazamiento">desplazamiento</a>);
 </div>
 
 <div style="text-indent:1cm">
@@ -41,7 +41,7 @@
 	<SPAN CLASS="palres">for</SPAN><span>(</span><A NAME="i"></A> 
 <SPAN CLASS="palres"> integer </SPAN><SPAN CLASS="ident">i</SPAN> = <SPAN CLASS="cte">0</SPAN><span>;</span><a href="#i">i</a><span><</span><SPAN CLASS="cte">10</SPAN><span>;</span><a href="#i">i</a> = <a href="#i">i</a> + <a href="#i">i</a><span>){</span>
 <div style="text-indent:5cm">
-	<a href="#null">printf</a>(<a href="#i">i</a>);
+	<SPAN CLASS="ident">printf</SPAN>(<a href="#i">i</a>);
 </div>
 <div style="text-indent:4cm">}</div>
 </div>
@@ -57,29 +57,29 @@
 </div>
 <span>}</span>
 <br>
-<a href="#codificar_cadena"><span>Inicio de la función</span></a>
-<a href="#main"><span> Inicio del programa</span></a>
+<a href="#FUNCIONES:codificar_cadena"><span>Inicio de la función</span></a>
+<a href="#PROGRAMA"><span> Inicio del programa</span></a>
 <hr><a NAME="FUNCIONES:save"></a>
 <SPAN CLASS="palres"> void </SPAN><SPAN CLASS="ident">save</SPAN> <span>(</span><SPAN CLASS="palres"> string </SPAN><A NAME="FUNCIONES:save:nombre"></A>
 <SPAN CLASS="ident">nombre</SPAN> <span>)</span><span>{</span>
 <div style="text-indent:1cm">
-	<a href="#null">fopen</a>(<SPAN CLASS="cte">"file.txt"</SPAN>, <SPAN CLASS="cte">"w"</SPAN>);
+	<SPAN CLASS="ident">fopen</SPAN>(<SPAN CLASS="cte">"file.txt"</SPAN>, <SPAN CLASS="cte">"w"</SPAN>);
 </div>
 
 <div style="text-indent:1cm">
-	<a href="#null">printf</a>(<a href="#FUNCIONES:save:nombre">nombre</a>);
+	<SPAN CLASS="ident">printf</SPAN>(<a href="#FUNCIONES:save:nombre">nombre</a>);
 </div>
 <span>}</span>
 <br>
-<a href="#save"><span>Inicio de la función</span></a>
-<a href="#main"><span> Inicio del programa</span></a>
+<a href="#FUNCIONES:save"><span>Inicio de la función</span></a>
+<a href="#PROGRAMA"><span> Inicio del programa</span></a>
 <hr>
 <h2>Programa Principal</h2>
 <br>
-<A NAME ="PROGRAMA_PRINCIPAL:FECHA"></A><span style="font-weight: bold;">#define</span> <span CLASS="ident">FECHA</span> <SPAN CLASS="cte">2023</SPAN>
+<A NAME ="PROGRAMA_PRINCIPAL:FECHA"></A><span style="font-weight: bold;">#define</span> <span CLASS="ident">FECHA</span> <SPAN CLASS = " cte">"</SPAN><SPAN CLASS="cte">2023</SPAN><SPAN CLASS = " cte">"</SPAN>
 <br>
 
-<A NAME ="PROGRAMA_PRINCIPAL:CODIGO"></A><span style="font-weight: bold;">#define</span> <span CLASS="ident">CODIGO</span> <SPAN CLASS="cte">10</SPAN>
+<A NAME ="PROGRAMA_PRINCIPAL:CODIGO"></A><span style="font-weight: bold;">#define</span> <span CLASS="ident">CODIGO</span> <SPAN CLASS = " cte">"</SPAN><SPAN CLASS="cte">10</SPAN><SPAN CLASS = " cte">"</SPAN>
 <br>
 
 <A NAME="PROGRAMA_PRINCIPAL:n_alumnos"></A> 
@@ -95,6 +95,7 @@
 <SPAN CLASS="palres"> string </SPAN><SPAN CLASS="ident">nombre</SPAN> = <SPAN CLASS="cte">"alumno1"</SPAN>;
 <br>
 <BR/>
+<a NAME="PROGRAMA_PRINCIPAL:Main"></a>
 <SPAN CLASS="palres"> void </SPAN><span class = "ident">Main</span>(){
 <div style="text-indent:1cm">
 	<A NAME="codificado"></A> 
@@ -102,11 +103,11 @@
 </div>
 
 <div style="text-indent:1cm">
-	<a href="#codificado">codificado</a> = <a href="#null">codificar_cadena</a>(<a href="#FUNCIONES:save:nombre">nombre</a>, <a href="#PROGRAMA_PRINCIPAL:FECHA">FECHA</a>);
+	<a href="#codificado">codificado</a> = <a href="#FUNCIONES:codificar_cadena">codificar_cadena</a>(<a href="#FUNCIONES:save:nombre">nombre</a>, <a href="#PROGRAMA_PRINCIPAL:FECHA">FECHA</a>);
 </div>
 
 <div style="text-indent:1cm">
-	<a href="#null">save</a>(<a href="#codificado">codificado</a>);
+	<a href="#FUNCIONES:save">save</a>(<a href="#codificado">codificado</a>);
 </div>
 
 <div style="text-indent:1cm">
@@ -114,6 +115,9 @@
 </div>
 
 <div style="text-indent:1cm">
-	<a href="#codificado">codificado</a> = <a href="#null">codificar_cadena</a>(<a href="#FUNCIONES:save:nombre">nombre</a>, (<a href="#PROGRAMA_PRINCIPAL:CODIGO">CODIGO</a> DIV <a href="#codificado">codificado</a>));
+	<a href="#codificado">codificado</a> = <a href="#FUNCIONES:codificar_cadena">codificar_cadena</a>(<a href="#FUNCIONES:save:nombre">nombre</a>, (<a href="#PROGRAMA_PRINCIPAL:CODIGO">CODIGO</a> DIV <a href="#codificado">codificado</a>));
 </div>
-}
+} <br><a href="#PROGRAMA_PRINCIPAL:Main"><span>Inicio de la función</span></a>
+<a href="#PROGRAMA"><span> Inicio del programa</span></a>
+
+<hr>
